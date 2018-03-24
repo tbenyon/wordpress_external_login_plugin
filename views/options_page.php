@@ -2,15 +2,17 @@
   class="exlog_options_page"
 >
     <?php screen_icon(); ?>
-    <h2><?php echo EXLOG_PLUGIN_DATA['name'] ?> Options</h2>
+    <h2><?php $plugin_data = unserialize(EXLOG_PLUGIN_DATA);
+	echo $plugin_data['name'] ?> Options</h2>
 
     <form method="post" action="options.php">
         <?php
-          settings_fields( EXLOG_PLUGIN_DATA['slug'] . '-option-group' );
-          do_settings_fields( EXLOG_PLUGIN_DATA['slug'] . '-option-group', '' );
+          settings_fields( $plugin_data['slug'] . '-option-group' );
+          do_settings_fields( $plugin_data['slug'] . '-option-group', '' );
         ?>
 
-        <?php foreach (EXLOG_OPTION_FIELDS as $form_section) : ?>
+        <?php $option_fields = unserialize(EXLOG_OPTION_FIELDS);
+		foreach ($option_fields as $form_section) : ?>
             <div class="options_section_container">
               <div class="options_section <?php echo $form_section['section_slug']; ?>">
                 <h3><?php echo $form_section['section_name'] ?></h3>

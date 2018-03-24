@@ -1,6 +1,6 @@
 <?php
 
-define('EXLOG_OPTION_FIELDS', array(
+$option_fields = array(
     array(
         "section_name" => "Functionality Settings",
         "section_slug" => "feature_settings",
@@ -307,4 +307,6 @@ define('EXLOG_OPTION_FIELDS', array(
             ),
         ),
     ),
-));
+);
+$option_fields_s = serialize($option_fields);
+define ( 'EXLOG_OPTION_FIELDS' , $option_fields_s );

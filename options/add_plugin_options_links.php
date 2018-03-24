@@ -1,7 +1,8 @@
 <?php
 function exlog_plugin_action_links( $links ) {
+	$plugin_options = unserialize(EXLOG_PLUGIN_OPTIONS);
     $links = array_merge( array(
-        '<a href="' . esc_url( admin_url( '/options-general.php?page=' . EXLOG_PLUGIN_DATA['slug']) ) . '">Settings</a>'
+        '<a href="' . esc_url( admin_url( '/options-general.php?page=' . $plugin_options['slug']) ) . '">Settings</a>'
     ), $links );
     return $links;
 }
