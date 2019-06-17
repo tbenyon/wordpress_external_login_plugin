@@ -42,6 +42,22 @@ function my_function_to_do_something_after_authentication($wp_user, $exlog_user_
 add_action('exlog_hook_action_authenticated', 'my_function_to_do_something_after_authentication', 10, 2);
 ```
 
+### Filter: exlog_hook_filter_authenticate_hash
+This hook provides the user with the password that the user typed in at the login screen and the hash stored in the database.
+
+The user can use this information to check if the password is correct.
+
+Returning `true` with authenticate the user and returning `false` will treat them as unauthorised.
+
+The below example shows how you could use the filter.
+
+```
+function myExlogHashAuthenticator($password, $hashFromDatabase) {
+    return password_verify($password, $hashFromDatabase);
+}
+add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 2);
+```
+
 ## Special Thanks
 A special thank you to Ben Lobaugh for a [great article](https://ben.lobaugh.net/blog/7175/wordpress-replace-built-in-user-authentication) which I used heavily for this plugin.
 

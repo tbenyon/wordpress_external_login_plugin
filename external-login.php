@@ -19,6 +19,7 @@ define( 'EXLOG_PATH_PLUGIN_LIB', EXLOG_PATH_PLUGIN_BASE . '/lib');
 define( 'EXLOG_PATH_PLUGIN_SANITISATION_VALIDATION', EXLOG_PATH_PLUGIN_BASE . '/sanitisation_validation');
 define( 'EXLOG_PATH_ASSETS', plugins_url( '/appAssets/', EXLOG_PLUGIN_FILE_PATH ));
 
+define( 'EXLOG_HOOK_FILTER_AUTHENTICATE_HASH', 'exlog_hook_filter_authenticate_hash');
 define( 'EXLOG_ROLE_BLOCK_VALUE', 'exlog_block');
 
 include EXLOG_PATH_PLUGIN_OPTIONS . '/wpconfig_options.php';

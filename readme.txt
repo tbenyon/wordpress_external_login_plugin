@@ -398,6 +398,23 @@ function my_function_to_do_something_after_authentication($wp_user, $exlog_user_
 add_action('exlog_hook_action_authenticated', 'my_function_to_do_something_after_authentication', 10, 2);
 `
 
+- exlog_hook_filter_authenticate_hash
+
+This hook provides you with the password that the user typed in at the login screen and the hash stored in the database.
+
+You can use this information to check if the password is correct.
+
+Returning `true` will authenticate the user and returning `false` will treat them as unauthorised.
+
+The below example shows how you could use the filter.
+
+`
+function myExlogHashAuthenticator($password, $hashFromDatabase) {
+    return password_verify($password, $hashFromDatabase);
+}
+add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 2);
+`
+
 = I need an extra feature. Can you add it? =
 
 Get in contact. I'll normally add simple functionality for free and pretty quick!

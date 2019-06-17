@@ -130,7 +130,12 @@ function exlog_auth_query($username, $password) {
             $user_specific_salt =  $userData[$db_data["dbstructure_salt"]];
         }
 
-        $valid_credentials = exlog_validate_password($password, $userData[$db_data["dbstructure_password"]], $user_specific_salt);
+        $hashFromDatabase = $userData[$db_data["dbstructure_password"]];
+        if(has_filter(EXLOG_HOOK_FILTER_AUTHENTICATE_HASH)) {
+            $valid_credentials = apply_filters(EXLOG_HOOK_FILTER_AUTHENTICATE_HASH, $password, $hashFromDatabase);
+        } else {
+            $valid_credentials = exlog_validate_password($password, $hashFromDatabase, $user_specific_salt);
+        }
 
         if ($valid_credentials) {
             $wp_user_data = exlog_build_wp_user_data($db_data, $userData);
