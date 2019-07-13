@@ -242,6 +242,7 @@ Here is a full listing of possible fields and values.
     * Possible Values
         * mysql
         * postgresql
+        * mssql
 
 * Database Hash Type
     * Constant Name
