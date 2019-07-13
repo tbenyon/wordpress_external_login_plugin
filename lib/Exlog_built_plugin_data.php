@@ -147,6 +147,7 @@ final class Exlog_built_plugin_data {
                         "select_options" => array(
                             "mysql" => "MySQL",
                             "postgresql" => "PostgreSQL",
+							"mssql" => "MSSQLServer",
                         ),
                         "required" => true
                     ),
