@@ -19,8 +19,8 @@ function exlog_get_external_db_instance_and_fields($dbType) {
                 "ApplicationIntent" => "ReadOnly"
             );
 			$db_instance = sqlsrv_connect( exlog_get_option("external_login_option_db_host"), $connectionOptions);
-			if( $db_instance === false )
-			{
+			if( $db_instance === false ) {
+				error_log('EXLOG:');
 				error_log(FormatErrors(sqlsrv_errors()));
 				return false;
 			}
@@ -82,9 +82,9 @@ function exlog_get_external_db_instance_and_fields($dbType) {
 
 		return $data;
 	}
-	catch (Exception $ex)
-	{
-		error_log(FormatErrors($ex));
+	catch (Exception $ex) {
+		error_log('EXLOG: Unable to create database connection:');
+		error_log(var_export($ex, true));
 		return false;
 	}
 };
@@ -105,6 +105,10 @@ function exlog_auth_query($username, $password) {
 		$dbType = exlog_get_option('external_login_option_db_type');
 
 		$db_data = exlog_get_external_db_instance_and_fields($dbType);
+
+		if ($db_data == false) {
+            return false;
+        }
 
 		$userData = null;
 
@@ -186,7 +190,7 @@ function exlog_auth_query($username, $password) {
             } else {
                 $valid_credentials = exlog_validate_password($password, $hashFromDatabase, $user_specific_salt);
             }
-            
+
 			if ($valid_credentials) {
 				$wp_user_data = exlog_build_wp_user_data($db_data, $userData);
 				$wp_user_data["exlog_authenticated"] = true;
@@ -199,10 +203,10 @@ function exlog_auth_query($username, $password) {
 			return false;
 		}
 	}
-	catch (Exception $ex)
-	{
-		error_log(FormatErrors($ex));
-		return false;
+	catch (Exception $ex) {
+        error_log('EXLOG: Unable to complete database query:');
+        error_log(var_export($ex, true));
+        return false;
 	}
 }
 
@@ -211,6 +215,10 @@ function exlog_test_query($limit = false) {
 		$dbType = exlog_get_option('external_login_option_db_type');
 
 		$db_data = exlog_get_external_db_instance_and_fields($dbType);
+
+        if ($db_data == false) {
+            return false;
+        }
 
 		if($dbType == "mssql") {
 			$query_string = "";
@@ -227,9 +235,8 @@ function exlog_test_query($limit = false) {
 
 			$stmt = sqlsrv_query( $db_data["db_instance"], $query_string);
 			
-			if (sqlsrv_has_rows( $stmt ) != true)
-			{
-				error_log("External Login – No rows returned from test query.");
+			if (sqlsrv_has_rows( $stmt ) != true) {
+				error_log("EXLOG: No rows returned from test query.");
 				return false;
 			}
 
@@ -283,13 +290,13 @@ function exlog_test_query($limit = false) {
 		}
 
 		//If got this far, query failed
-		error_log("External Login - No rows returned from test query.");
+		error_log("EXLOG: No rows returned from test query.");
 		return false;
 	}
-	catch (Exception $ex)
-	{
-		error_log(FormatErrors($ex));
-		return false;
+	catch (Exception $ex) {
+        error_log('EXLOG: Unable to make test query:');
+        error_log(var_export($ex, true));
+        return false;
 	}
 }
 

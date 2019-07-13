@@ -29,7 +29,7 @@ function exlog_map_role($db_role) {
     if ($unspecified_role != "") {
         return array($unspecified_role);
     } else {
-        error_log("External Login Error: User role could not be mapped and no fall back role has been given. The role 'subscriber' has been given");
+        error_log("EXLOG: Error: User role could not be mapped and no fall back role has been given. The role 'subscriber' has been given");
         return array("subscriber");
     }
 }
