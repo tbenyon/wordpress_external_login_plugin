@@ -3,8 +3,8 @@ Contributors: tbenyon
 Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
-Tested up to: 5.2.1
-Stable tag: 1.7.1
+Tested up to: 5.2.2
+Stable tag: 1.7.2
 Requires PHP: 5.6.34
 License: MIT
 
@@ -434,6 +434,13 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 == Changelog ==
 
+= 1.7.2 =
+* Add redirection tool that allows internal or external sites to be redirected to once a user is authenticated
+* Add Microsoft SQL Server support (BETA)
+* Add ability to validate a users password based on custom custom code using the 'exlog_hook_filter_authenticate_hash' hook
+* Fix issue that caused using the 'None' hash setting to have the password always set to be lower case
+* Remove code that causes a warning in debug mode
+
 = 1.7.1 =
 * Allow mysql databases to accept username or e-mail address for the new username
 * Fixed missing logo on production (Hopefully :P )
@@ -498,6 +505,13 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 
 == Upgrade Notice ==
+
+= 1.7.2 =
+* Add redirection tool that allows internal or external sites to be redirected to once a user is authenticated
+* Add Microsoft SQL Server support (BETA)
+* Add ability to validate a users password based on custom custom code using the 'exlog_hook_filter_authenticate_hash' hook
+* Fix issue that caused using the 'None' hash setting to have the password always set to be lower case
+* Remove code that causes a warning in debug mode
 
 = 1.7.1 =
 * Allow mysql databases to accept username or e-mail address for the new username
