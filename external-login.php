@@ -28,6 +28,7 @@ include EXLOG_PATH_PLUGIN_TOOLS . '/get_roles.php';
 include EXLOG_PATH_PLUGIN_TOOLS . '/map_role.php';
 include EXLOG_PATH_PLUGIN_LIB . '/Exlog_built_plugin_data.php';
 include EXLOG_PATH_PLUGIN_LIB . '/Exlog_view_building.php';
+include EXLOG_PATH_PLUGIN_LIB . '/Exlog_redirect.php';
 include EXLOG_PATH_PLUGIN_OPTIONS . '/options_external_login.php';
 include EXLOG_PATH_PLUGIN_OPTIONS . '/cleanup.php';
 include EXLOG_PATH_PLUGIN_OPTIONS . '/testing_ajax.php';
@@ -35,3 +36,7 @@ include EXLOG_PATH_PLUGIN_OPTIONS . '/add_plugin_options_links.php';
 include EXLOG_PATH_PLUGIN_LOGIN . '/validate_password.php';
 include EXLOG_PATH_PLUGIN_LOGIN . '/db.php';
 include EXLOG_PATH_PLUGIN_LOGIN . '/authenticate.php';
+
+// Setup redirection hooks
+$exlog_redirection = new Exlog_redirect();
+$exlog_redirection->exlog_setup_redirection();

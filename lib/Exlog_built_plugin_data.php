@@ -71,6 +71,48 @@ final class Exlog_built_plugin_data {
                         "type" => "checkbox",
                     ),
                     array(
+                        "field_name" => "Redirect After Authentication",
+                        "field_description" => "The place to redirect the user to after they have logged in. This can be local (on the same site) or external (to another site)",
+                        "field_slug" => "external_login_option_redirection_type",
+                        "type" => "select",
+                        "select_options" => array(
+                            "none" => "Default",
+                            "local" => "Local",
+                            "external" => "External",
+                        ),
+                        "required" => true
+                    ),
+                    array(
+                        "field_name" => "Redirect Location (Internal)",
+                        "field_description" => "This is the location to navigate to within the site.<br>e.g. For home page \"<b>/</b>\"",
+                        "field_slug" => "external_login_option_redirection_location_internal",
+                        "type" => "text",
+                        "required" => false,
+                        "conditionals" => array(
+                            "and",
+                            array(
+                                "condition_field" => "external_login_option_redirection_type",
+                                "condition_field_value" => "local",
+                                "condition_operator" => "="
+                            ),
+                        )
+                    ),
+                    array(
+                        "field_name" => "Redirect Location (External)",
+                        "field_description" => "This is the location to navigate to outside of the site.<br>e.g. \"<b>https://wordpress.org/plugins/external-login/#reviews</b>\"",
+                        "field_slug" => "external_login_option_redirection_location_external",
+                        "type" => "text",
+                        "required" => false,
+                        "conditionals" => array(
+                            "and",
+                            array(
+                                "condition_field" => "external_login_option_redirection_type",
+                                "condition_field_value" => "external",
+                                "condition_operator" => "="
+                            ),
+                        )
+                    ),
+                    array(
                         "field_name" => "Disable Local Login",
                         "field_description" => "Tick this box if you want to disable the login attempt with the Wordpress Database if the external login fails. This will only take effect if External Login is enabled.",
                         "field_slug" => "external_login_option_disable_local_login",
