@@ -4,6 +4,7 @@
   "description": "See readme.txt for the main information for the plugin. This is done to save duplication as readme.txt is required for WordPress plugin repository.",
   "main": "gulpfile.js",
   "scripts": {
+    "deploy": "./deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
