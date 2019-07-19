@@ -426,10 +426,10 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 1. Main Settings View
 2. Functionality Settings
 3. Database Connection Settings
-4. Database Table Mapping Settings
-5. Password Hashing Settings
+4. Password Hashing Settings
+5. Database Table Mapping Settings
 6. Role Settings
-7. Test Results
+7. Exclude Users
 
 
 == Changelog ==
