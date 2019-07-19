@@ -162,11 +162,13 @@ function exlog_auth_query($username, $password) {
 			$query_string =
 				'SELECT *' .
 				' FROM ' . esc_sql($db_data["dbstructure_table"]) .
-				' WHERE ' . esc_sql($db_data["dbstructure_username"]) . '="' . esc_sql($username) . '"';
+				' WHERE (' . esc_sql($db_data["dbstructure_username"]) . '="' . esc_sql($username) . '"';
 
 			if ($db_data["dbstructure_email"]) {
-				$query_string .= ' OR ' . esc_sql($db_data["dbstructure_email"]) . '="' . esc_sql($username) . '"';
-			}
+				$query_string .= ' OR ' . esc_sql($db_data["dbstructure_email"]) . '="' . esc_sql($username) . '")';
+			} else {
+                $query_string .= ')';
+            }
 
 			$query_string .= $exclude_query_string_component;
 
