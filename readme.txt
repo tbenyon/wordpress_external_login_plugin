@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
 Tested up to: 5.2.2
-Stable tag: 1.7.2
+Stable tag: 1.7.3
 Requires PHP: 5.6.34
 License: MIT
 
@@ -442,6 +442,10 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 == Changelog ==
 
+= 1.7.3 =
+* Fix issue that prevented the BETA feature of excluding users based on custom data in the users table from functioning
+* Update plugin details and screenshots
+
 = 1.7.2 =
 * Add redirection tool that allows internal or external sites to be redirected to once a user is authenticated
 * Add Microsoft SQL Server support (BETA)
@@ -513,6 +517,10 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 
 == Upgrade Notice ==
+
+= 1.7.3 =
+* Fix issue that prevented the BETA feature of excluding users based on custom data in the users table from functioning
+* Update plugin details and screenshots
 
 = 1.7.2 =
 * Add redirection tool that allows internal or external sites to be redirected to once a user is authenticated
