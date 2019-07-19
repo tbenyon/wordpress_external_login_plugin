@@ -13,7 +13,7 @@ External Login allows users to log in to the WordPress site with a different dat
 
 == Description ==
 
-External Login allows you to log in in to your WordPress site using an 'external database' instead of the WordPress database. This means if you already have a login system you can integrate that into your WordPress site. The 'external database' that you would like to use does not have to be a WordPress database.
+External Login allows you to login to your WordPress site using an 'external database' instead of the WordPress database. This means if you already have a login system you can integrate that into your WordPress site. The 'external database' that you would like to use does not have to be a WordPress database.
 
 The plugin will re-create users in the WordPress database which has has two benefits:
     1. It will allow you to use WordPress correctly with other plugins that require a named user to be logged in.
@@ -25,6 +25,15 @@ The plugin will re-create users in the WordPress database which has has two bene
 * Map the names for your database fields against the required WordPress fields
 * Map roles from your 'external database' to those found in WordPress e.g. a student in the 'external database' becomes an editor in the WordPress database.
 * Every time a user logs in, their WordPress user will be updated with the details from the 'external database'.
+* Exclude certain users from accessing the WordPress admin area based on any field in the Users table on the External Database
+* Ability to fall back to the generated WordPress user for login if the 'external database' is unavailable.
+* Block users based on their role
+* Block a user based on any field in your users table
+* Redirect the user after being successfully authenticated
+* Support for different database types:
+    * MySQL
+    * PostgreSQL
+    * Microsoft SQL
 * Many password hashing methods are supported including:
     * bcrypt
     * md2
@@ -34,14 +43,13 @@ The plugin will re-create users in the WordPress database which has has two bene
     * sha256
     * sha384
     * sha512
+    * no hashing
     * and more...
 * Support for separate password salts for each password
 * Support for one salt for all passwords
 * Support for salts being prepended or appended to the password
 * Test the connection in the settings menu to make sure your data is being pulled correctly
-* Exclude certain users from accessing the WordPress admin area based on any field in the Users table on the External Database
 * Option to delete plugin data on plugin deactivation
-* Ability to fall back to the generated WordPress user for login if the 'external database' is unavailable.
 
 
 == Installation ==
@@ -61,13 +69,13 @@ The plugin will re-create users in the WordPress database which has has two bene
 To give an idea of whether this plugin does the job you need it to, here is the basic logic flow:
 1. User logs in using the normal WordPress login screen.
 2. We hash the users password with the method and salt (if given) that is chosen in the settings
-3. We do a simple SQL query to the external database to see if their username and the hashed password match a user.
+3. We do a simple database query to the external database to see if their username and the hashed password match a user.
 4. We create or update the details of the new user.
 5. We log that user in
-6. When the user logs out of Wordpress the Wordpress session ends
+6. When the user logs out of Wordpress, the Wordpress session ends
 
 Please note that this system is built for the login process to be a completely different login process to anything else.
-If you are looking for Single Sign On (log in to one website and you're logged in else where) you should be looking for a OAuth solution in my opinion.
+If you are looking for Single Sign On (log in to one website and you're logged in else where) you should be looking for an OAuth solution in my opinion.
 
 = How do I add a port to the database connection? =
 
