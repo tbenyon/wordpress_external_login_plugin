@@ -44,7 +44,7 @@ PLUGINSLUG="external-login"
 SVNPATH="/tmp/$PLUGINSLUG"
 SVNURL="https://plugins.svn.wordpress.org/$PLUGINSLUG"
 SVNUSER="tbenyon"
-PLUGINDIR="$CURRENTDIR"
+PLUGINDIR="$CURRENTDIR/plugin-files"
 MAINFILE="$PLUGINSLUG.php"
 
 #echo "Q2. Your local plugin root directory (the Git repo)."
