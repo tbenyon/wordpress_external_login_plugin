@@ -12,9 +12,31 @@ services:
       MYSQL_USER: wordpress
       MYSQL_PASSWORD: wordpress
 
+  externalDbMySql5.7:
+    image: mysql:5.7
+    volumes:
+      - externalDbDataMySql5.7:/var/lib/mysql
+    restart: always
+    ports:
+      - 3330:3306
+    environment:
+      MYSQL_ROOT_PASSWORD: externalPassword
+      MYSQL_DATABASE: externalDb
+      MYSQL_USER: externalDbUser
+      MYSQL_PASSWORD: externalDbPassword
+
+  flyway:
+    image: flyway/flyway
+    command: -url=jdbc:mysql://externalDbMySql5.7/externalDb -user=externalDbUser -password=externalDbPassword -connectRetries=60 migrate
+    volumes:
+      - ./example-user-data/sql:/flyway/sql
+    depends_on:
+      - externalDbMySql5.7
+
   wordpress:
     depends_on:
       - db
+      - externalDbMySql5.7
     image: wordpress:latest
     ports:
       - "8000:80"
@@ -26,5 +48,7 @@ services:
       WORDPRESS_DB_USER: wordpress
       WORDPRESS_DB_PASSWORD: wordpress
       WORDPRESS_DB_NAME: wordpress
+
 volumes:
   db_data: {}
+  externalDbDataMySql5.7: {}
