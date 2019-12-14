@@ -4,7 +4,7 @@ Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
 Tested up to: 5.3.1
-Stable tag: 1.8.0
+Stable tag: 1.8.1
 Requires PHP: 5.6.34
 License: MIT
 
@@ -446,7 +446,7 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 == Changelog ==
 
-= 1.8.0 =
+= 1.8.1 =
 * Pass additional data to the authenticating hash hook
 * Remove deprecated method (screen_icon())
 * Make the plugin easier for other developers to work on (integrating docker and an improved README.md)
@@ -527,7 +527,7 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 == Upgrade Notice ==
 
-= 1.8.0 =
+= 1.8.1 =
 * Pass additional data to the authenticating hash hook
 * Remove deprecated method (screen_icon())
 * Make the plugin easier for other developers to work on (integrating docker and an improved README.md)
