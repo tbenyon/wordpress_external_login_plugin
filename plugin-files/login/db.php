@@ -188,7 +188,13 @@ function exlog_auth_query($username, $password) {
 
             $hashFromDatabase = $userData[$db_data["dbstructure_password"]];
             if (has_filter(EXLOG_HOOK_FILTER_AUTHENTICATE_HASH)) {
-                $valid_credentials = apply_filters(EXLOG_HOOK_FILTER_AUTHENTICATE_HASH, $password, $hashFromDatabase);
+                $valid_credentials = apply_filters(
+                    EXLOG_HOOK_FILTER_AUTHENTICATE_HASH,
+                    $password,
+                    $hashFromDatabase,
+                    $username,
+                    $userData
+                );
             } else {
                 $valid_credentials = exlog_validate_password($password, $hashFromDatabase, $user_specific_salt);
             }
@@ -227,9 +233,7 @@ function exlog_test_query($limit = false) {
 			
 			if ($limit && is_int($limit)) {
 				$query_string .= 'SELECT TOP ' . $limit . ' *';
-			}
-			else
-			{
+			} else {
 				$query_string .= 'SELECT *';
 			}
 

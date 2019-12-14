@@ -104,19 +104,24 @@ add_action('exlog_hook_action_authenticated', 'my_function_to_do_something_after
 ```
 
 ### Filter: exlog_hook_filter_authenticate_hash
-This hook provides the user with the password that the user typed in at the login screen and the hash stored in the database.
+The user can use this hook to check if the password is correct in a custom way. For example, if they use a hashing algorithm not supported by the plugin by default.
 
-The user can use this information to check if the password is correct.
+This hook provides the user with a range of different information:
+- `$password` - the password that was typed in at the login screen 
+- `$hashFromDatabase` - the hash stored in the database
+- `$username` - the username that was typed in in the login screen
+- `$externalUserData` - the rest of the data retrieved from the external database for the user that was found
 
-Returning `true` with authenticate the user and returning `false` will treat them as unauthorised.
+
+Returning `true` will authenticate the user and returning `false` will treat them as unauthorised.
 
 The below example shows how you could use the filter.
 
 ```
-function myExlogHashAuthenticator($password, $hashFromDatabase) {
+function myExlogHashAuthenticator($password, $hashFromDatabase, $username, $externalUserData) {
     return password_verify($password, $hashFromDatabase);
 }
-add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 2);
+add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 4);
 ```
 
 ## Special Thanks
