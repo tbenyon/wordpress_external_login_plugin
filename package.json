@@ -6,7 +6,7 @@
   "scripts": {
     "up": "docker-compose up --build -d",
     "down": "docker-compose down",
-    "restart": "docker-compose restart",
+    "restart": "npm run down && npm run up",
     "frontend": "gulp",
     "deploy": "./deploy.sh",
     "test": "echo \"Error: no test specified\" && exit 1"

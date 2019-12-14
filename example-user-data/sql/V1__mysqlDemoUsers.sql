@@ -51,8 +51,8 @@ LOCK TABLES `User` WRITE;
 
 INSERT INTO `User` (`UserID`, `FirstName`, `LastName`, `NickName`, `CreatedDate`, `DOB`, `UserType`, `LastUpdate`, `ContactNumber`, `Hash`, `cms_state`, `Email`, `address`, `city`, `zip_code`, `state`, `phone`)
 VALUES
-	(2,'Thomas','Benyon','T-DAWG','2016-09-10','1987-04-23','Mentor','2018-03-24 11:27:36','07792736282','$1$ZfPE84Z7$n0xJl3t36AewrQyyU9gXa.','blocked','tom.benyon2@gmail.com',NULL,NULL,NULL,NULL,NULL),
-	(1,'Will','Benyon','monkeyMan','2016-09-10','1982-10-20','Mentor','2016-09-10 10:16:52','07236388181',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL);
+	(2,'Thomas','Benyon','tom','2016-09-10','1987-04-23','Mentor','2018-03-24 11:27:36','07792736282','$2y$12$6tDeJO9VmCNOJjGKuLnDyugdCuBv9LAGZxJaLAmgC/19KKCy3bq7u','blocked','tom.benyon2@gmail.com',NULL,NULL,NULL,NULL,NULL),
+	(1,'Will','Benyon','monkeyMan','2016-09-10','1982-10-20','Mentor','2016-09-10 10:16:52','07236388181','NULL',NULL,NULL,NULL,NULL,NULL,NULL,NULL);
 
 /*!40000 ALTER TABLE `User` ENABLE KEYS */;
 UNLOCK TABLES;

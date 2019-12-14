@@ -8,16 +8,61 @@ This is done to save duplication as readme.txt is required for WordPress plugin 
 ### Getting started
 1) Install docker on your machine
 1) Change directory into this repo
-1) Run `docker-compose up -d`
+1) Run `npm i` from the plugin directory
+1) Run `npm run up` which will create the required docker images
 1) Navigate to the [admin area](localhost:8000/wp-admin)
+1) Setup WordPress generating a new admin username and password
 1) Navigate to the plugins section of the WordPress admin area
 1) Activate External Login plugin
 1) Navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings 
 
-To compile css and auto-refresh the plugin during development
-1) Run `npm i` from the plugin directory
-1) Run gulp
-1) If not automatically done, navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings 
+For front end edits to the options menu, gulp is used to compile css and auto-refresh the browser as changes are made:
+1) Run `npm run frontend`
+
+### Checking the plugin works
+1) Navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login)
+1) Click the "Test Connection" button
+1) You should see a pop up with some example data
+1) Check the `Enable External Login` checkbox and click the `Save Changes` button below to activate the plugin flow.
+1) Logout and try logging in with the following details:
+    - Username: `tom`
+    - Password: `externalPassword`
+1) You should get logged in as the user "Thomas Benyon"
+1) For further development, logging back in as your admin user is advised to gain greater access to permissions
+
+### Modifying settings
+Modifying settings can be done in two different ways:
+1) Through constants setup in wp-config.php
+
+    A default example of this is setup and moved into the WordPress container (`wordpress/wp-config.php`).
+    From looking at the file you can see that environment variables can also be used to modify these settings.
+    
+    Manipulating this can be done but will require the container to be restarted for changed to take effect (`npm run restart`).
+1)  Through the CMS settings interface for the plugin
+
+    Navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings 
+
+It is important to note that the settings in `wp-config.php` take precedence and will block the CMS options from being editable if they exist. 
+
+### Accessing Databases outside of the containers
+For development a GUI can be useful for editing the databases content
+The relevant ports have been exposed to help achieve this. 
+
+For the details required to connect see `docker-compose.yml` but below are some examples:
+
+#### The WordPress Database
+- host: `127.0.0.1` 
+- port: `3330` 
+- username: `wordpress` 
+- password: `wordpress` 
+- database: `wordpress` 
+
+#### The MySQL External Database
+- host: `127.0.0.1` 
+- port: `3330` 
+- username: `externalDbUser` 
+- password: `externalDbPassword` 
+- database: `externalDb` 
 
 ## Hooks
 
