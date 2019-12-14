@@ -37,7 +37,7 @@ services:
     depends_on:
       - db
       - externalDbMySql5.7
-    image: wordpress:latest
+    build: ./wordpress
     ports:
       - "8000:80"
     restart: always
