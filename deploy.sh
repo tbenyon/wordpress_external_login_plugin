@@ -44,7 +44,8 @@ PLUGINSLUG="external-login"
 SVNPATH="/tmp/$PLUGINSLUG"
 SVNURL="https://plugins.svn.wordpress.org/$PLUGINSLUG"
 SVNUSER="tbenyon"
-PLUGINDIR="$CURRENTDIR/plugin-files"
+PLUGINDIRNAME="plugin-files"
+PLUGINDIR="$CURRENTDIR/$PLUGINDIRNAME"
 MAINFILE="$PLUGINSLUG.php"
 
 #echo "Q2. Your local plugin root directory (the Git repo)."
@@ -166,7 +167,9 @@ Thumbs.db
 .gitignore" "$SVNPATH/trunk/"
 
 echo "Exporting the HEAD of master from git to the trunk of SVN"
-git checkout-index -a -f --prefix=$SVNPATH/trunk/
+find $PLUGINDIRNAME -print0 | git checkout-index --prefix=$SVNPATH/trunk/ -f -z --stdin
+mv $SVNPATH/trunk/plugin-files/* $SVNPATH/trunk/
+rmdir $SVNPATH/trunk/plugin-files/
 
 # If submodule exist, recursively check out their indexes
 if [ -f ".gitmodules" ]
