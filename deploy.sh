@@ -145,7 +145,7 @@ svn status | grep -v "^.[ \t]*\..*" | grep "^\!" | awk '{print $2"@"}' | xargs s
 svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2"@"}' | xargs svn add
 svn commit --username=$SVNUSER -m "Preparing for $PLUGINVERSION release"
 
-echo "\nUpdating WordPress plugin repo assets and committing."
+echo -e "\nUpdating WordPress plugin repo assets and committing."
 cd $SVNPATH/assets/
 # Delete all new files that are not set to be ignored
 svn status | grep -v "^.[ \t]*\..*" | grep "^\!" | awk '{print $2"@"}' | xargs svn del
@@ -169,8 +169,9 @@ svn commit --username=$SVNUSER -m "Tagging version $PLUGINVERSION"
 echo
 
 echo "Removing temporary directory $SVNPATH."
-cd $SVNPATH
-cd ..
-rm -fr $SVNPATH/
+#cd $SVNPATH
+#cd ..
+#rm -fr $SVNPATH/
 
+echo "$SVNPATH"
 echo "*** FIN ***"
