@@ -120,29 +120,10 @@ Thumbs.db
 .gitattributes
 .gitignore" "$SVNPATH/trunk/"
 
-echo "Exporting the HEAD of master from git to the trunk of SVN"
-find $PLUGINDIRNAME -print0 | git checkout-index --prefix=$SVNPATH/trunk/ -f -z --stdin
-mv $SVNPATH/trunk/plugin-files/* $SVNPATH/trunk/
-rm -rf $SVNPATH/trunk/plugin-files/
-
-# If submodule exist, recursively check out their indexes
-if [ -f ".gitmodules" ]
-	then
-		echo "Exporting the HEAD of each submodule from git to the trunk of SVN"
-		git submodule init
-		git submodule update
-		git config -f .gitmodules --get-regexp '^submodule\..*\.path$' |
-			while read path_key path
-			do
-				#url_key=$(echo $path_key | sed 's/\.path/.url/')
-				#url=$(git config -f .gitmodules --get "$url_key")
-				#git submodule add $url $path
-				echo "This is the submodule path: $path"
-				echo "The following line is the command to checkout the submodule."
-				echo "git submodule foreach --recursive 'git checkout-index -a -f --prefix=$SVNPATH/trunk/$path/'"
-				git submodule foreach --recursive 'git checkout-index -a -f --prefix=$SVNPATH/trunk/$path/'
-			done
-fi
+echo
+echo "Replace SNV Trunk with new deployment files"
+rm -r $SVNPATH/trunk/*
+cp -r * $SVNPATH/trunk/
 
 echo
 
@@ -164,9 +145,7 @@ svn status | grep -v "^.[ \t]*\..*" | grep "^\!" | awk '{print $2"@"}' | xargs s
 svn status | grep -v "^.[ \t]*\..*" | grep "^?" | awk '{print $2"@"}' | xargs svn add
 svn commit --username=$SVNUSER -m "Preparing for $PLUGINVERSION release"
 
-echo
-
-echo "Updating WordPress plugin repo assets and committing."
+echo "\nUpdating WordPress plugin repo assets and committing."
 cd $SVNPATH/assets/
 # Delete all new files that are not set to be ignored
 svn status | grep -v "^.[ \t]*\..*" | grep "^\!" | awk '{print $2"@"}' | xargs svn del
