@@ -9,7 +9,8 @@
     "restart": "npm run down && npm run up",
     "frontend": "gulp",
     "deploy": "./deploy.sh",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "php vendor/bin/codecept run --steps",
+    "test-debug": "php vendor/bin/codecept run --steps --debug"
   },
   "repository": {
     "type": "git",

@@ -1,0 +1,6 @@
+actor: AcceptanceTester
+modules:
+  enabled:
+    - PhpBrowser:
+        url: localhost:8000/wp-login.php
+    - \Helper\Acceptance
