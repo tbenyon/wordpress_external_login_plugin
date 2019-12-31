@@ -27,13 +27,21 @@ services:
       MYSQL_USER: externalDbUser
       MYSQL_PASSWORD: externalDbPassword
 
-  flyway:
+  flywaySql:
     image: flyway/flyway
-    command: -url=jdbc:mysql://externalDbMySql5.7/externalDb -user=externalDbUser -password=externalDbPassword -connectRetries=60 migrate
+    command: -configFiles=/flyway/external-login/configFiles/sql.flyway migrate
     volumes:
-      - ./example-user-data/sql:/flyway/sql
+      - ./flyway/:/flyway/external-login
     depends_on:
       - externalDbMySql5.7
+
+  flywayWordPress:
+    image: flyway/flyway
+    command: -configFiles=/flyway/external-login/configFiles/wordpress.flyway migrate
+    volumes:
+      - ./flyway/:/flyway/external-login
+    depends_on:
+      - db
 
   wordpress:
     depends_on:

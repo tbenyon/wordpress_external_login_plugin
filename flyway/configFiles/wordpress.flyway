@@ -1,0 +1,5 @@
+flyway.url=jdbc:mysql://db/wordpress
+flyway.user=wordpress
+flyway.password=wordpress
+flyway.connectRetries=60
+flyway.locations=filesystem:external-login/migrations/wordpress

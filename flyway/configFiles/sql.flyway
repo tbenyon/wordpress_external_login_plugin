@@ -1,0 +1,5 @@
+flyway.url=jdbc:mysql://externalDbMySql5.7/externalDb
+flyway.user=externalDbUser
+flyway.password=externalDbPassword
+flyway.connectRetries=60
+flyway.locations=filesystem:external-login/migrations/sql
