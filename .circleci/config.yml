@@ -1,8 +1,35 @@
-version: 2
+version: 2.0
 jobs:
-    build:
-      machine:
-          image: ubuntu-1604:201903-01
-      steps:
-          - checkout
-          - run: npm run up
+  test:
+    machine:
+        image: ubuntu-1604:201903-01
+    steps:
+      - checkout
+      - run: npm run up
+      - run: |
+          sudo apt update && sudo apt install -y software-properties-common
+          sudo add-apt-repository -yu ppa:ondrej/php
+          sudo apt-get update
+          sudo apt-get install -y php7.1
+      - run: sudo apt-get install php7.1-curl
+      - run: sudo apt-get install php7.1-xml
+      - run: sudo apt-get install php7.1-mbstring
+      - run: sudo apt-get update
+      - run: |
+          wget https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz \
+          && sudo tar -C /usr/local/bin -xzvf dockerize-linux-amd64-v0.6.1.tar.gz \
+          && sudo rm dockerize-linux-amd64-v0.6.1.tar.gz
+      - run: |
+          curl -sS https://getcomposer.org/installer -o composer-setup.php
+          sudo php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+      - run: sudo composer self-update
+      - run: sudo composer install
+      - run: dockerize -wait http://localhost:8000 -timeout 1m
+      - run: npm run test
+
+workflows:
+  version: 2
+
+  btd:
+    jobs:
+      - test
