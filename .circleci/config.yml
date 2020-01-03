@@ -8,9 +8,9 @@ jobs:
       - run:
           name: CI Setup
           command: sudo ./build-scripts/ciSetup.sh
-      - run: npm run up
-      - run: dockerize -wait http://localhost:8000 -timeout 1m
-      - run: npm run test
+      - run:
+          name: Run Tests
+          command: npm run ci-test
 
 workflows:
   version: 2
