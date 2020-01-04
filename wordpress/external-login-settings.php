@@ -1,5 +1,8 @@
 <?php
 
+/** EXLOG - Whether the plugin code is activated or not */
+define('EXTERNAL_LOGIN_OPTION_ENABLE_EXTERNAL_LOGIN', getenv('EXTERNAL_LOGIN_OPTION_ENABLE_EXTERNAL_LOGIN') ? getenv('EXTERNAL_LOGIN_OPTION_ENABLE_EXTERNAL_LOGIN') : 'on');
+
 /** EXLOG - The External Database Name */
 define('EXTERNAL_LOGIN_OPTION_DB_NAME', getenv('EXTERNAL_LOGIN_OPTION_DB_NAME') ? getenv('EXTERNAL_LOGIN_OPTION_DB_NAME') : 'externalDb');
 
