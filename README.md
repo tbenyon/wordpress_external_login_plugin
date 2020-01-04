@@ -59,7 +59,7 @@ For the details required to connect see `docker-compose.yml` but below are some 
 
 #### The MySQL External Database
 - host: `127.0.0.1` 
-- port: `3330` 
+- port: `3331` 
 - username: `externalDbUser` 
 - password: `externalDbPassword` 
 - database: `externalDb` 
