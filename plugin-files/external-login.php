@@ -20,12 +20,14 @@ define( 'EXLOG_PATH_PLUGIN_SANITISATION_VALIDATION', EXLOG_PATH_PLUGIN_BASE . '/
 define( 'EXLOG_PATH_ASSETS', plugins_url( '/appAssets/', EXLOG_PLUGIN_FILE_PATH ));
 
 define( 'EXLOG_HOOK_FILTER_AUTHENTICATE_HASH', 'exlog_hook_filter_authenticate_hash');
+define( 'EXLOG_HOOK_FILTER_CUSTOM_EXCLUDE', 'exlog_hook_filter_custom_should_exclude');
 define( 'EXLOG_ROLE_BLOCK_VALUE', 'exlog_block');
 
 include EXLOG_PATH_PLUGIN_OPTIONS . '/wpconfig_options.php';
 include EXLOG_PATH_PLUGIN_SANITISATION_VALIDATION . '/validation.php';
 include EXLOG_PATH_PLUGIN_TOOLS . '/get_roles.php';
 include EXLOG_PATH_PLUGIN_TOOLS . '/map_role.php';
+include EXLOG_PATH_PLUGIN_TOOLS . '/exclude.php';
 include EXLOG_PATH_PLUGIN_LIB . '/Exlog_built_plugin_data.php';
 include EXLOG_PATH_PLUGIN_LIB . '/Exlog_view_building.php';
 include EXLOG_PATH_PLUGIN_LIB . '/Exlog_redirect.php';

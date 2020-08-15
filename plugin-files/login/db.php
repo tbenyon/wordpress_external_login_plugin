@@ -122,12 +122,12 @@ function exlog_auth_query($username, $password) {
 			'SELECT *' .
 			' FROM ' . esc_sql($db_data["dbstructure_table"]) .
 			' WHERE ' . esc_sql($db_data["dbstructure_username"]) . '=\'' . esc_sql($username) . '\'';
-			
+
 			$stmt = sqlsrv_query($db_data["db_instance"], $query_string);
 			if (sqlsrv_has_rows($stmt) != true) {
 				return array("valid" => false);
 			}
-			
+
 			while( $userData = sqlsrv_fetch_array($stmt)) {
 				$user_specific_salt = false;
 
@@ -136,7 +136,9 @@ function exlog_auth_query($username, $password) {
 				}
 
 				$valid_credentials = exlog_validate_password($password, $userData[$db_data["dbstructure_password"]], $user_specific_salt);
-				
+
+                if( exlogCustomShouldExcludeUser($userData) ) return false;
+
 				if ($valid_credentials) {
 					$wp_user_data = exlog_build_wp_user_data($db_data, $userData);
 					$wp_user_data["exlog_authenticated"] = true;
@@ -180,7 +182,8 @@ function exlog_auth_query($username, $password) {
 		}
 
 		if ($userData) {
-			$user_specific_salt = false;
+            if( exlogCustomShouldExcludeUser($userData) ) return false;
+            $user_specific_salt = false;
 
 			if (exlog_get_option('external_login_option_db_salting_method') == 'all') {
 				$user_specific_salt =  $userData[$db_data["dbstructure_salt"]];
@@ -230,7 +233,7 @@ function exlog_test_query($limit = false) {
 
 		if($dbType == "mssql") {
 			$query_string = "";
-			
+
 			if ($limit && is_int($limit)) {
 				$query_string .= 'SELECT TOP ' . $limit . ' *';
 			} else {
@@ -240,19 +243,19 @@ function exlog_test_query($limit = false) {
 			$query_string .= ' FROM ' . esc_sql($db_data["dbstructure_table"]);
 
 			$stmt = sqlsrv_query( $db_data["db_instance"], $query_string);
-			
+
 			if (sqlsrv_has_rows( $stmt ) != true) {
 				error_log("EXLOG: No rows returned from test query.");
 				return false;
 			}
 
 			$users = array();
-			
+
 			while( $user_data = sqlsrv_fetch_array( $stmt))
 			{
 				array_push($users, exlog_build_wp_user_data($db_data, $user_data));
 			}
-			
+
 			return $users;
 		}
 		else if ($dbType == "postgresql") {

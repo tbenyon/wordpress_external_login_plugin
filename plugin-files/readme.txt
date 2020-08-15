@@ -428,6 +428,26 @@ function myExlogHashAuthenticator($password, $hashFromDatabase, $username, $exte
 add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 4);
 `
 
+- exlog_hook_filter_custom_should_exclude
+
+This hook allows you to add custom logic to exclude users.
+
+I provides you with all the data for the user that is stored in the external database users table.
+If you return `true` from this function it will prevent the user logging in, and returning `false` will bypass this
+exclusion.
+
+For example, let's say your external users table had a field called `expiry` which stored a date. In this example we
+want to block users if they login after their expiry date.
+
+Adding the following to your `functions.php` would achieve this:
+
+`
+function myExlogCustomExcluder($userData) {
+    return strtotime($userData['expiry']) < strtotime('now');
+}
+add_filter('exlog_hook_filter_custom_should_exclude', 'myExlogCustomExcluder', 10, 1);
+`
+
 = I need an extra feature. Can you add it? =
 
 Get in contact. I'll normally add simple functionality for free and pretty quick!
