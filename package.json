@@ -9,6 +9,7 @@
     "restart": "npm run down && npm run up",
     "frontend": "gulp",
     "deploy": "./deploy.sh",
+    "settingsDefault": "php -r \"require './utils/SettingsBuilder.php'; require './tests/acceptance/DatabaseTools.php'; SettingsBuilder::setDefaultSettings();\"",
     "test": "php vendor/bin/codecept run --steps",
     "test-debug": "php vendor/bin/codecept run --steps --debug",
     "ci-test": "npm run up && php tests/acceptance/HealthChecks.php && dockerize -wait http://localhost:8000 -timeout 1m && npm run test"

@@ -1,12 +1,11 @@
 <?php
-
-include './tests/acceptance/SettingsBuilder.php';
+include_once './utils/SettingsBuilder.php';
 
 class LocalLoginCest
 {
     public function _before(AcceptanceTester $I)
     {
-        SettingsBuilder::tempSetSetting();
+        SettingsBuilder::setDefaultSettings();
         $I->amOnPage('/wp-login.php?action=logout');
     }
 

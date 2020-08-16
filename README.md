@@ -14,7 +14,10 @@ This is done to save duplication as readme.txt is required for WordPress plugin 
 1) Setup WordPress generating a new admin username and password
 1) Navigate to the plugins section of the WordPress admin area
 1) Activate External Login plugin
-1) Navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings 
+1) Add appropriate settings by either:
+    - Navigating to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings
+    - Running `npm run settingsDefault`
+
 
 For front end edits to the options menu, gulp is used to compile css and auto-refresh the browser as changes are made:
 1) Run `npm run frontend`
@@ -31,16 +34,20 @@ For front end edits to the options menu, gulp is used to compile css and auto-re
 1) For further development, logging back in as your admin user is advised to gain greater access to permissions
 
 ### Modifying settings
-Modifying settings can be done in two different ways:
-1) Through constants setup in wp-config.php
+Modifying settings can be done in three different ways:
 
-    A default example of this is setup and moved into the WordPress container (`wordpress/wp-config.php`).
-    From looking at the file you can see that environment variables can also be used to modify these settings.
-    
-    Manipulating this can be done but will require the container to be restarted for changed to take effect (`npm run restart`).
-1)  Through the CMS settings interface for the plugin
+#### 1) Through constants setup in wp-config.php
+A default example of this is setup and moved into the WordPress container (`wordpress/external-login-settings.php`).
+From looking at the file you can see that environment variables can also be used to modify these settings.
+*IMPORTANT* - Including this file is currently commented out in `wordpress/wp-config.php` near the top in favour of using the database for development to assist testing.
+Including the example file and manipulating its settings can be done but will require the container to be restarted for changed to take effect (`npm run restart`).
 
-    Navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings 
+#### 2)  Through the CMS settings interface for the plugin
+Navigate to the [settings page](http://localhost:8000/wp-admin/options-general.php?page=external-login) to add the required settings
+
+#### 3)  Using the settings builder to manipulate the database stored settings
+In `utils/SettingsBuilder.php` there are a handful of utilities for generating the desired settings.
+There is a wrapper to generate the default development settings in the form of a NPM script `npm run settingsDefault`
 
 It is important to note that the settings in `wp-config.php` take precedence and will block the CMS options from being editable if they exist. 
 

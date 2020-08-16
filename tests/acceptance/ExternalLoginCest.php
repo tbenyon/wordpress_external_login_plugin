@@ -2,11 +2,14 @@
 
 require_once './tests/acceptance/DatabaseTools.php';
 require_once './tests/acceptance/ExternalDatabaseUserBuilder.php';
+include_once './utils/SettingsBuilder.php';
+
 
 class ExternalLoginCest
 {
     public function _before(AcceptanceTester $I)
     {
+        SettingsBuilder::setDefaultSettings();
         $I->amOnPage('/wp-login.php?action=logout');
     }
 
