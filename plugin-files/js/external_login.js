@@ -20,8 +20,8 @@
                 var $this = $(this);
                 var role_data = {};
 
-                role_data[json_key_external_role_value] = $(".external_role", $this).attr("value");
-                role_data[json_key_wordpress_role_value] = $(".wordpress_role", $this).attr("value");
+                role_data[json_key_external_role_value] = $(".external_role", $this).val();
+                role_data[json_key_wordpress_role_value] = $(".wordpress_role", $this).val();
                 role_data[json_key_wordpress_role_name] = $(".wordpress_role", $this).attr("name");
                 role_data[json_key_external_role_name] = $(".external_role", $this).attr("name");
 
