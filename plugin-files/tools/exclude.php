@@ -9,3 +9,18 @@ function exlogCustomShouldExcludeUser($userData) {
     }
     return false;
 }
+
+function exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($user) {
+    $exclude_users_data = exlog_get_option('exlog_exclude_users_field_name_repeater');
+    if (gettype($exclude_users_data) == 'array') {
+        foreach ($exclude_users_data as $field) {
+            $field_name = $field['exlog_exclude_users_field_name'];
+            $field_values = $field['exlog_exclude_users_field_value_repeater'];
+            foreach ($field_values as $value_object) {
+                $value = $value_object['exlog_exclude_users_field_value'];
+                if ($user[$field_name] === $value) return true;
+            }
+        }
+    }
+    return false;
+}

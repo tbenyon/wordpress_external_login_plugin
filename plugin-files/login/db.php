@@ -112,11 +112,6 @@ function exlog_auth_query($username, $password) {
 
 		$userData = null;
 
-		$exclude_query_string_component = "";
-		if (exlog_get_option('external_login_option_enable_exclude_users') == "on") {
-			$exclude_query_string_component = exlog_build_exclude_query_string_component($db_data);
-		}
-
 		if ($dbType == "mssql") {
 			$query_string =
 			'SELECT *' .
@@ -137,7 +132,10 @@ function exlog_auth_query($username, $password) {
 
 				$valid_credentials = exlog_validate_password($password, $userData[$db_data["dbstructure_password"]], $user_specific_salt);
 
-                if( exlogCustomShouldExcludeUser($userData) ) return false;
+                if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
+                    $user_data["exlog_authenticated"] = false;
+                    return $userData;
+                }
 
 				if ($valid_credentials) {
 					$wp_user_data = exlog_build_wp_user_data($db_data, $userData);
@@ -151,8 +149,7 @@ function exlog_auth_query($username, $password) {
 			$query_string =
 				'SELECT *' .
 				' FROM "' . esc_sql($db_data["dbstructure_table"]) . '"' .
-				' WHERE "' . esc_sql($db_data["dbstructure_username"]) . '" ILIKE \'' . esc_sql($username) . '\'' .
-			 $exclude_query_string_component;
+				' WHERE "' . esc_sql($db_data["dbstructure_username"]) . '" ILIKE \'' . esc_sql($username) . '\'';
 
 			$rows = pg_query($query_string) or error_log("EXLOG: External DB query failed.");
 
@@ -172,8 +169,6 @@ function exlog_auth_query($username, $password) {
                 $query_string .= ')';
             }
 
-			$query_string .= $exclude_query_string_component;
-
 			$rows = $db_data["db_instance"]->get_results($query_string, ARRAY_A);
 
 			if (sizeof($rows) > 0) {
@@ -182,7 +177,11 @@ function exlog_auth_query($username, $password) {
 		}
 
 		if ($userData) {
-            if( exlogCustomShouldExcludeUser($userData) ) return false;
+            if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
+                $user_data["exlog_authenticated"] = false;
+                return $userData;
+            }
+
             $user_specific_salt = false;
 
 			if (exlog_get_option('external_login_option_db_salting_method') == 'all') {
@@ -307,36 +306,6 @@ function exlog_test_query($limit = false) {
         error_log(var_export($ex, true));
         return false;
 	}
-}
-
-function exlog_build_exclude_query_string_component($db_data) {
-    $dbType = exlog_get_option('external_login_option_db_type');
-    $exclude_users_data = exlog_get_option('exlog_exclude_users_field_name_repeater');
-
-    $exclude_query_string_section = "";
-    if (gettype($exclude_users_data) == 'array') {
-        foreach ($exclude_users_data as $field) {
-            $field_name = $field['exlog_exclude_users_field_name'];
-            if (!exlog_check_if_field_exists($db_data, $field_name)) {
-                continue;
-            }
-
-            $field_values = $field['exlog_exclude_users_field_value_repeater'];
-            foreach ($field_values as $value_object) {
-                $value = $value_object['exlog_exclude_users_field_value'];
-                if ($dbType == "mssql") {
-					$string_part = ' AND ' . esc_sql($field_name) . ' != \'' . esc_sql($value) . '\'';
-				}
-				else if ($dbType == "postgresql") {
-                    $string_part = ' AND "' . esc_sql($field_name) . '"::text NOT ILIKE \'' . esc_sql($value) . '\'';
-                } else {
-                    $string_part = ' AND NOT ' . esc_sql($field_name) . '="' . esc_sql($value) . '"';
-                }
-                $exclude_query_string_section .= $string_part;
-            }
-        }
-    }
-    return $exclude_query_string_section;
 }
 
 function exlog_check_if_field_exists($db_data, $field) {
