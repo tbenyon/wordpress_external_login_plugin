@@ -4,10 +4,12 @@
 class ExternalDatabaseUserBuilder {
     private $username;
     private $hashedPassword;
+    private $state;
 
     function __construct() {
         $this->username = $this->_generateUsername("user-");
         $this->hashedPassword = $this->generatePasswordHash('password');
+        $this->state = 'active';
     }
 
     private function generatePasswordHash($password) {
@@ -28,6 +30,11 @@ class ExternalDatabaseUserBuilder {
         return $this;
     }
 
+    function withState($state) {
+        $this->state = $state;
+        return $this;
+    }
+
     function build() {
         return new ExternalDatabaseUser(
             $this->username,
@@ -36,7 +43,7 @@ class ExternalDatabaseUserBuilder {
             'Smith',
             'admin',
             '1987-04-23',
-            'active',
+            $this->state,
             'someuser@somedomain.com',
             '2019-01-03'
         );

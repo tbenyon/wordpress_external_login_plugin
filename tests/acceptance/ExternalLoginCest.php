@@ -25,15 +25,41 @@ class ExternalLoginCest
 
         $this->_givenUserExistsInExternalMysqlDb($user);
 
+        $this->_attemptLogin($I, $username, $password);
+        $I->seeInCurrentUrl('wp-admin');
+
+        $this->_deleteUserFromDatabases($user);
+    }
+
+    public function shouldExcludeUsersAsSpecifiedInSettingsPage(AcceptanceTester $I)
+    {
+        SettingsBuilder::setSetting(
+            'exlog_exclude_users_field_name_repeater',
+            $this->_buildExcludeUsersData()
+        );
+
+        $username = ExternalDatabaseUserBuilder::_generateUsername("user-");
+        $password = "pass";
+
+        $user = ExternalDatabaseUser::create()
+            ->withUsername($username)
+            ->withPassword($password)
+            ->withState('block')
+            ->build();
+
+        $this->_givenUserExistsInExternalMysqlDb($user);
+        $this->_attemptLogin($I, $username, $password);
+        $I->see('Invalid username or password');
+
+        $this->_deleteUserFromDatabases($user);
+    }
+
+    function _attemptLogin($I, $username, $password) {
         $I->amOnPage('/wp-login.php');
         $I->see('Log In');
         $I->fillField('#user_login', $username);
         $I->fillField('#user_pass', $password);
         $I->click('#wp-submit');
-        $I->seeInCurrentUrl('wp-admin');
-
-        $this->_deleteUserInExternalDatabase($user);
-        $this->_deleteUserInWordpressDatabase($user);
     }
 
     function _givenUserExistsInExternalMysqlDb($user) {
@@ -72,5 +98,39 @@ class ExternalLoginCest
         $pdoStatement  = $conn->prepare($query_string);
         $pdoStatement->execute(array(':username' => $user->username));
         $conn = null;
+    }
+
+    function _deleteUserFromDatabases($user) {
+        $this->_deleteUserInWordpressDatabase($user);
+        $this->_deleteUserInExternalDatabase($user);
+    }
+
+    function _buildExcludeUsersData() {
+        $excludeField = 'cms_state';
+        $excludeValue = 'block';
+        $excludeUsersData = array(
+            array(
+                array(
+                    'name' => 'exlog_exclude_users_field_name',
+                    "repeater_field" => false,
+                    "value" => $excludeField
+                ),
+                array(
+                    "name" => "exlog_exclude_users_field_value_repeater",
+                    "repeater_field" => true,
+                    "value" => array(
+                        array(
+                            array(
+                                "name" => "exlog_exclude_users_field_value",
+                                "repeater_field" => false,
+                                "value" => $excludeValue
+                            )
+                        )
+                    )
+                )
+            )
+        );
+
+        return base64_encode(json_encode($excludeUsersData));
     }
 }
