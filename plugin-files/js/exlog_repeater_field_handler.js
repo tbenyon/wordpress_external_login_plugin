@@ -89,19 +89,19 @@ var possible_repeater_data_master = [
 
     function place_data_from_db() {
       function place_specific_repeater_values($parent_element, data) {
-      //  Put all data in the name value
+        //  Put all data in the name value
         var $data_store = $parent_element.children(repeater_data_store_selector);
         var data_string;
         try {
           data_string = JSON.stringify(data);
-        } catch(e) {
+        } catch (e) {
           console.log('EXLOG: Failed to parse some data from the database.\nIncorrect data:', data);
           data_string = false;
         }
         $data_store.val(data_string);
 
         // Of that data, put each value in the correct input
-        if (data) {
+        if (data && Array.isArray(data)) {
           data.forEach(function (repeater_item, i) {
             var $repeater_item;
             if (i > 0) { // If not the first repeater item - create a new one in the DOM and store the jQuery object
@@ -128,7 +128,8 @@ var possible_repeater_data_master = [
         }
       }
 
-      // Put the master data into the repeater master component and then start placing specific values
+      // For each repeater field on the page, put the master data into the repeater master component and then start
+      // placing specific values
       $parent_repeater_fields.each(function () {
         var $parent_repeater_field = $(this);
         var base_64_string = $parent_repeater_field.children(repeater_data_store_selector).val();
@@ -192,7 +193,7 @@ var possible_repeater_data_master = [
 
       // Get a unique id for the new repeater item
       var new_id = 1;
-      while (used_ids.indexOf(new_id.toString()) > -1 ) { // While new_id is in used_ids
+      while (used_ids.indexOf(new_id.toString()) > -1) { // While new_id is in used_ids
         new_id += 1;
       }
 
@@ -200,7 +201,7 @@ var possible_repeater_data_master = [
 
       create_new_item($repeater_option_container, new_id, false);
     }
-    
+
     function monitorRepeaterInputs() {
       var change_events_string = change_events.join(' ');
       var $repeater_data_stores = $(repeater_data_store_selector);
@@ -219,6 +220,10 @@ var possible_repeater_data_master = [
       });
     }
 
+    /**
+     * On field updates, this updates the hidden input with the newly computed data from the view
+     * @param $repeater_data_store The hidden input element that will save the computed data to the database
+     */
     function update_repeater_data($repeater_data_store) {
       var data_for_store = []; // Object to be populated by first child inputs of repeater
       var repeater_items = $repeater_data_store.siblings('.repeater_item');
@@ -276,7 +281,25 @@ var possible_repeater_data_master = [
       on_delete_item_click();
     }
 
+    /**
+     * This is a temporary solution to the fact that repeater data is not properly stored in the saving hidden input
+     * when it comes from the database
+     * This simply triggers all repeater items so that the JS can sore the current data in the format that the database
+     * expects when saving
+     * A more complete solution would be to ensure that the starting data from the DB is by default put into the hidden
+     * input in the correct format
+     */
+    function triggerAllRepeaterInputs() {
+      $(repeater_item_selector + ' input').each(function () {
+        const $repeater_item = $(this);
+        if (typeof $repeater_item.trigger === 'function') {
+          $repeater_item.trigger(change_events[0]);
+        }
+      })
+    }
+
     place_data_from_db();
     reset_watchers();
+    triggerAllRepeaterInputs(); // See function comment
   })
 }(jQuery));
