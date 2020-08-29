@@ -3,8 +3,8 @@ Contributors: tbenyon
 Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
-Tested up to: 5.3.2
-Stable tag: 1.8.4
+Tested up to: 5.5.0
+Stable tag: 1.9.0
 Requires PHP: 5.6.34
 License: MIT
 
@@ -182,6 +182,13 @@ Below is a list of the available hashing options. Within each there are examples
 * haval256,5
     * a7dac1b901376073284fbe145b37ffe6bcf6fc1ae94728186939ce91bcf73e51
 * none
+
+= My plugin uses a different or custom hashing algorithm, can the plugin handle this? =
+
+Yes. It will require you to use a built in hook (exlog_hook_filter_authenticate_hash) that you can add to your functions.php file.
+
+Documentation on how to use this and other hooks can be found in the [FAQ section](https://wordpress.org/plugins/external-login/#what%20hooks%20are%20available%20in%20the%20external%20login%20flow%3F).
+
 
 = What values can I set in wp-config.php? =
 Here is a full listing of possible fields and values.
@@ -370,6 +377,28 @@ Here is a full listing of possible fields and values.
 
 = What hooks are available in the External Login flow? =
 
+- exlog_hook_filter_authenticate_hash
+
+You can use this hook to check if the password is correct in a custom way. For example, if you use a hashing algorithm not supported by the plugin by default.
+
+This hook provides you with a range of different information:
+- `$password` - the password that was typed in at the login screen
+- `$hashFromDatabase` - the hash stored in the database
+- `$username` - the username that was typed in in the login screen
+- `$externalUserData` - the rest of the data retrieved from the external database for the user that was found
+
+Returning `true` will authenticate the user and returning `false` will treat them as unauthorised.
+
+The below example shows how you could use the filter:
+
+`
+function myExlogHashAuthenticator($password, $hashFromDatabase, $username, $externalUserData) {
+    return password_verify($password, $hashFromDatabase);
+}
+add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 4);
+`
+
+
 - exlog_hook_action_authenticated
 This hook is run after the user has been authenticated from the external database.
 
@@ -405,27 +434,6 @@ function my_function_to_do_something_after_authentication($wp_user, $exlog_user_
 }
 
 add_action('exlog_hook_action_authenticated', 'my_function_to_do_something_after_authentication', 10, 2);
-`
-
-- exlog_hook_filter_authenticate_hash
-
-You can use this hook to check if the password is correct in a custom way. For example, if you use a hashing algorithm not supported by the plugin by default.
-
-This hook provides you with a range of different information:
-- `$password` - the password that was typed in at the login screen
-- `$hashFromDatabase` - the hash stored in the database
-- `$username` - the username that was typed in in the login screen
-- `$externalUserData` - the rest of the data retrieved from the external database for the user that was found
-
-Returning `true` will authenticate the user and returning `false` will treat them as unauthorised.
-
-The below example shows how you could use the filter:
-
-`
-function myExlogHashAuthenticator($password, $hashFromDatabase, $username, $externalUserData) {
-    return password_verify($password, $hashFromDatabase);
-}
-add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 4);
 `
 
 - exlog_hook_filter_custom_should_exclude
@@ -465,6 +473,11 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 
 == Changelog ==
+
+= 1.9.0 =
+* Add exlog_hook_filter_custom_should_exclude hook to allow custom coded user exclusions
+* Fix bug that prevented 'Role Settings' for mapping roles being saved in the database
+* Fix but that prevented 'Exclude Users' settings saving
 
 = 1.8.4 =
 * Update deployment process
@@ -549,6 +562,11 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 
 == Upgrade Notice ==
+
+= 1.9.0 =
+* Add exlog_hook_filter_custom_should_exclude hook to allow custom coded user exclusions
+* Fix bug that prevented 'Role Settings' for mapping roles being saved in the database
+* Fix but that prevented 'Exclude Users' settings saving
 
 = 1.8.4 =
 * Update deployment process
