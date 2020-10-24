@@ -78,7 +78,28 @@ This hook is run after the user has been authenticated from the external databas
 
 This will not run if the user is authenticated from the local WordPress database.
 
-Below is an example of code that could be added to your `functions.php` file to delete a user from the external database after they have logged in for the first time.
+Below is an example of code that could be added to your `functions.php` file to add additional fields from the users 
+table on the external database as user meta data in WordPress.
+
+Please note the use of the third parameter $rawResponse that returns all fields from the users table in the external 
+database.
+```
+/**
+ * Example function to do something after External Login has authenticated a user
+ */
+function exlog_add_additional_user_data($wp_user, $exlog_user_data, $rawResponse) {
+    update_user_meta(
+        $wp_user->ID,                       // User ID
+        'someKeyForUserMetaData',           // WP Meta field key
+        $rawResponse['someExternalField'],  // External table data
+        false                               // Not unique
+    );
+}
+
+add_action('exlog_hook_action_authenticated', 'exlog_add_additional_user_data', 10, 3);
+```
+
+Below is a different example that deletes a user from the external database after they have logged in for the first time.
 ```
 /**
  * Example function to do something after External Login has authenticated a user

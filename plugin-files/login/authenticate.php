@@ -10,7 +10,7 @@ function exlog_auth( $user, $username, $password ){
 
         $response = exlog_auth_query($username, $password);
 
-        $roles = exlog_map_role($response['role']);
+        $roles = exlog_map_role($response['wp_user_data']['role']);
 
         $block_access_due_to_role = true;
         foreach ($roles as $role) {
@@ -27,24 +27,24 @@ function exlog_auth( $user, $username, $password ){
                 $user = new WP_Error('denied', __("You are not allowed access"));
 
                 // If user was NOT authenticated
-            } else if (!($response["exlog_authenticated"])) {
+            } else if (!$response["authenticated"]) {
                 // User does not exist, send back an error message
                 $user = new WP_Error('denied', __("Invalid username or password"));
 
                 // If user was authenticated
-            } else if ($response["exlog_authenticated"]) {
+            } else if ($response["authenticated"]) {
                 // External user exists, try to load the user info from the WordPress user table
                 $userobj = new WP_User();
-                $user = $userobj->get_data_by('login', $response['username']); // Does not return a WP_User object 🙁
+                $user = $userobj->get_data_by('login', $response['wp_user_data']['username']); // Does not return a WP_User object 🙁
                 $user = new WP_User($user->ID); // Attempt to load up the user with that ID
 
                 $exlog_userdata = array(
-                    'user_login' => $response['username'],
-                    'first_name' => $response['first_name'],
-                    'last_name'  => $response['last_name'],
+                    'user_login' => $response['wp_user_data']['username'],
+                    'first_name' => $response['wp_user_data']['first_name'],
+                    'last_name'  => $response['wp_user_data']['last_name'],
                     'user_pass'  => $password,
                     'role'       => $roles[0],
-                    'user_email' => $response['email'],
+                    'user_email' => $response['wp_user_data']['email'],
                 );
 
                 // If user does not exist
@@ -71,7 +71,7 @@ function exlog_auth( $user, $username, $password ){
                 }
 
                 // Hook that passes user data on successful login
-                do_action('exlog_hook_action_authenticated', $user, $exlog_userdata);
+                do_action('exlog_hook_action_authenticated', $user, $exlog_userdata, $response['raw_response']);
             }
         }
 

@@ -404,7 +404,28 @@ This hook is run after the user has been authenticated from the external databas
 
 This will not run if the user is authenticated from the local WordPress database.
 
-Below is an example of code that could be added to your `functions.php` file to delete a user from the external database after they have logged in for the first time.
+Below is an example of code that could be added to your `functions.php` file to add additional fields from the users
+table on the external database as user meta data in WordPress.
+
+Please note the use of the third parameter $rawResponse that returns all fields from the users table in the external
+database.
+`
+/**
+ * Example function to do something after External Login has authenticated a user
+ */
+function exlog_add_additional_user_data($wp_user, $exlog_user_data, $rawResponse) {
+    update_user_meta(
+        $wp_user->ID,                       // User ID
+        'someKeyForUserMetaData',           // WP Meta field key
+        $rawResponse['someExternalField'],  // External table data
+        false                               // Not unique
+    );
+}
+
+add_action('exlog_hook_action_authenticated', 'exlog_add_additional_user_data', 10, 3);
+`
+
+Below is a different example that deletes a user from the external database after they have logged in for the first time.
 `
 /**
  * Example function to do something after External Login has authenticated a user
@@ -455,6 +476,52 @@ function myExlogCustomExcluder($userData) {
 }
 add_filter('exlog_hook_filter_custom_should_exclude', 'myExlogCustomExcluder', 10, 1);
 `
+
+= How do I add additional fields from my external database in to WordPress? =
+The `exlog_hook_action_authenticated` hook can be used to achieve this. It is only run if the user is authenticated
+with the external database and not the local WordPress database.
+
+If you are unfamiliar with where to put such code, at the top of your `functions.php` file in your them folder is a
+good place to start. My personal preference is to store this type of code in "must use plugins" but that is your own
+decision. Alternatively you could use a plugin like `Code Snippets` to add the code.
+
+If the additional data you require is in the users table achiving your goal is slightly easier. Below is an example
+where by there is a field in the external database called `someExternalField` and we want to store that as user meta
+data in WordPress under the name `someKeyForUserMetaData`.
+
+`
+/**
+ * Example function to do something after External Login has authenticated a user
+ */
+function exlog_add_additional_user_data($wp_user, $exlog_user_data, $rawResponse) {
+    update_user_meta(
+        $wp_user->ID,                       // User ID
+        'someKeyForUserMetaData',           // WP Meta field key
+        $rawResponse['someExternalField'],  // External table data
+        false                               // Not unique
+    );
+}
+
+add_action('exlog_hook_action_authenticated', 'exlog_add_additional_user_data', 10, 3);
+`
+
+If you needed multiple fields you could add multiple calls to `update_user_meta`.
+
+If the additional data you require is not in the users table of your external database you will have to write your own
+query to access the data you require.
+
+If you wish to fetch the connection details from the plugin, the below code snippet shows how you can use an External
+Login function to get the connection details you require and also shows an example query:
+
+`
+// Uses the data provided to the plugin to create the database object and data required for a query
+$db_data = exlog_get_external_db_instance_and_fields('mysql');
+
+// A query of your choice
+$query_string = "SELECT * FROM someTable";
+$result = $db_data["db_instance"]->get_results($query_string, ARRAY_A);
+`
+You may need to pass the string "mssql" or "postgresql" instead of "mysql" depending on your database.
 
 = I need an extra feature. Can you add it? =
 

@@ -176,10 +176,15 @@ function exlog_auth_query($username, $password) {
 			}
 		}
 
+        $query_response = array(
+            "authenticated" => false,
+            "raw_response" => $userData,
+            "wp_user_data" => null
+        );
+
 		if ($userData) {
             if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
-                $user_data["exlog_authenticated"] = false;
-                return $userData;
+                return $query_response;
             }
 
             $user_specific_salt = false;
@@ -202,12 +207,11 @@ function exlog_auth_query($username, $password) {
             }
 
 			if ($valid_credentials) {
-				$wp_user_data = exlog_build_wp_user_data($db_data, $userData);
-				$wp_user_data["exlog_authenticated"] = true;
-				return $wp_user_data;
+                $query_response["wp_user_data"] = exlog_build_wp_user_data($db_data, $userData);
+                $query_response["authenticated"] = true;
+				return $query_response;
 			} else {
-				$user_data["exlog_authenticated"] = false;
-				return $userData;
+				return $query_response;
 			}
 		} else {
 			return false;
