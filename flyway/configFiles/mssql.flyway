@@ -1,0 +1,5 @@
+flyway.url=jdbc:sqlserver://externalDbMsSql:1433;databaseName=master
+flyway.user=sa
+flyway.password=externalDbPassword3
+flyway.connectRetries=60
+flyway.locations=filesystem:external-login/migrations/mssql

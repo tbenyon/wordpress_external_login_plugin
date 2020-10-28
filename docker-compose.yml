@@ -2,6 +2,7 @@ version: '3.3'
 
 services:
   db:
+    container_name: exlog_DB_wordpress
     image: mysql:5.7
     volumes:
       - db_data:/var/lib/mysql
@@ -15,6 +16,7 @@ services:
       MYSQL_PASSWORD: wordpress
 
   externalDbMySql5.7:
+    container_name: exlog_DB_mysql5.7
     image: mysql:5.7
     volumes:
       - externalDbDataMySql5.7:/var/lib/mysql
@@ -27,7 +29,26 @@ services:
       MYSQL_USER: externalDbUser
       MYSQL_PASSWORD: externalDbPassword
 
+  externalDbMsSql:
+    container_name: exlog_DB_mssql
+    image: mcr.microsoft.com/mssql/server:2019-latest
+    ports:
+      - 1433:1433
+    environment:
+      SA_PASSWORD: externalDbPassword3
+      ACCEPT_EULA: Y
+
+  flywayMsSql:
+    container_name: exlog_FLYWAY_mssql
+    image: flyway/flyway
+    command: -configFiles=/flyway/external-login/configFiles/mssql.flyway migrate
+    volumes:
+      - ./flyway/:/flyway/external-login
+    depends_on:
+      - externalDbMsSql
+
   flywaySql:
+    container_name: exlog_FLYWAY_mysql5.7
     image: flyway/flyway
     command: -configFiles=/flyway/external-login/configFiles/sql.flyway migrate
     volumes:
@@ -36,6 +57,7 @@ services:
       - externalDbMySql5.7
 
   flywayWordPress:
+    container_name: exlog_FLYWAY_wordpress
     image: flyway/flyway
     command: -configFiles=/flyway/external-login/configFiles/wordpress.flyway migrate
     volumes:
@@ -44,6 +66,7 @@ services:
       - db
 
   wordpress:
+    container_name: exlog_SERVER_wordpress
     depends_on:
       - db
       - externalDbMySql5.7
