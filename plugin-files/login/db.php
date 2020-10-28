@@ -100,6 +100,47 @@ function exlog_build_wp_user_data($db_data, $userData) {
     );
 }
 
+function exlog_build_query_response($userData, $username, $password, $db_data) {
+    if (!$userData) {
+        return false;
+    }
+
+    $query_response = array(
+        "authenticated" => false,
+        "raw_response" => $userData,
+        "wp_user_data" => null
+    );
+
+    if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
+        return $query_response;
+    }
+
+    $user_specific_salt = false;
+
+    if (exlog_get_option('external_login_option_db_salting_method') == 'all') {
+        $user_specific_salt =  $userData[$db_data["dbstructure_salt"]];
+    }
+
+    $hashFromDatabase = $userData[$db_data["dbstructure_password"]];
+    if (has_filter(EXLOG_HOOK_FILTER_AUTHENTICATE_HASH)) {
+        $valid_credentials = apply_filters(
+            EXLOG_HOOK_FILTER_AUTHENTICATE_HASH,
+            $password,
+            $hashFromDatabase,
+            $username,
+            $userData
+        );
+    } else {
+        $valid_credentials = exlog_validate_password($password, $hashFromDatabase, $user_specific_salt);
+    }
+
+    if ($valid_credentials) {
+        $query_response["wp_user_data"] = exlog_build_wp_user_data($db_data, $userData);
+        $query_response["authenticated"] = true;
+    }
+    return $query_response;
+}
+
 function exlog_auth_query($username, $password) {
 	try {
 		$dbType = exlog_get_option('external_login_option_db_type');
@@ -119,33 +160,10 @@ function exlog_auth_query($username, $password) {
 			' WHERE ' . esc_sql($db_data["dbstructure_username"]) . '=\'' . esc_sql($username) . '\'';
 
 			$stmt = sqlsrv_query($db_data["db_instance"], $query_string);
-			if (sqlsrv_has_rows($stmt) != true) {
-				return array("valid" => false);
-			}
 
-			while( $userData = sqlsrv_fetch_array($stmt)) {
-				$user_specific_salt = false;
+			$userData = sqlsrv_fetch_array($stmt);
 
-				if (exlog_get_option('external_login_option_db_salting_method') == 'all') {
-					$user_specific_salt = $userData[$db_data["dbstructure_salt"]];
-				}
-
-				$valid_credentials = exlog_validate_password($password, $userData[$db_data["dbstructure_password"]], $user_specific_salt);
-
-                if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
-                    $user_data["exlog_authenticated"] = false;
-                    return $userData;
-                }
-
-				if ($valid_credentials) {
-					$wp_user_data = exlog_build_wp_user_data($db_data, $userData);
-					$wp_user_data["exlog_authenticated"] = true;
-					return $wp_user_data;
-				}
-			}
-			return array("valid" => false);
-		}
-		else if ($dbType == "postgresql") {
+		} else if ($dbType == "postgresql") {
 			$query_string =
 				'SELECT *' .
 				' FROM "' . esc_sql($db_data["dbstructure_table"]) . '"' .
@@ -176,46 +194,7 @@ function exlog_auth_query($username, $password) {
 			}
 		}
 
-        $query_response = array(
-            "authenticated" => false,
-            "raw_response" => $userData,
-            "wp_user_data" => null
-        );
-
-		if ($userData) {
-            if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
-                return $query_response;
-            }
-
-            $user_specific_salt = false;
-
-			if (exlog_get_option('external_login_option_db_salting_method') == 'all') {
-				$user_specific_salt =  $userData[$db_data["dbstructure_salt"]];
-			}
-
-            $hashFromDatabase = $userData[$db_data["dbstructure_password"]];
-            if (has_filter(EXLOG_HOOK_FILTER_AUTHENTICATE_HASH)) {
-                $valid_credentials = apply_filters(
-                    EXLOG_HOOK_FILTER_AUTHENTICATE_HASH,
-                    $password,
-                    $hashFromDatabase,
-                    $username,
-                    $userData
-                );
-            } else {
-                $valid_credentials = exlog_validate_password($password, $hashFromDatabase, $user_specific_salt);
-            }
-
-			if ($valid_credentials) {
-                $query_response["wp_user_data"] = exlog_build_wp_user_data($db_data, $userData);
-                $query_response["authenticated"] = true;
-				return $query_response;
-			} else {
-				return $query_response;
-			}
-		} else {
-			return false;
-		}
+        return exlog_build_query_response($userData, $username, $password, $db_data);
 	}
 	catch (Exception $ex) {
         error_log('EXLOG: Unable to complete database query:');
