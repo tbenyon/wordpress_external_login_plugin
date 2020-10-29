@@ -18,7 +18,7 @@ function exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($user) {
             $field_values = $field['exlog_exclude_users_field_value_repeater'];
             foreach ($field_values as $value_object) {
                 $value = $value_object['exlog_exclude_users_field_value'];
-                if ($user[$field_name] === $value) return true;
+                if (isset($user[$field_name]) && $user[$field_name] === $value) return true;
             }
         }
     }
