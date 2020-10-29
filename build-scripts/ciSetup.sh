@@ -20,6 +20,6 @@ rm dockerize-linux.tar.gz
 
 echo -e "\nInstalling Composer"
 curl --silent --show-error https://getcomposer.org/installer -o composer-setup.php
-php composer-setup.php --install-dir=/usr/local/bin --filename=composer
+php composer-setup.php --install-dir=/usr/local/bin --filename=composer php composer-setup.php --version=1.10.10
 composer self-update
 composer install
