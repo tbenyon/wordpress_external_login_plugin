@@ -21,7 +21,7 @@ function exlog_get_external_db_instance_and_fields($dbType) {
 			$db_instance = sqlsrv_connect( exlog_get_option("external_login_option_db_host"), $connectionOptions);
 			if( $db_instance === false ) {
 				error_log('EXLOG:');
-				error_log(FormatErrors(sqlsrv_errors()));
+				error_log(var_export(sqlsrv_errors(), true));
 				return false;
 			}
 		}
