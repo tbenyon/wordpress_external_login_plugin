@@ -3,8 +3,8 @@ Contributors: tbenyon
 Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
-Tested up to: 5.5.0
-Stable tag: 1.9.0
+Tested up to: 5.5.1
+Stable tag: 1.10.0
 Requires PHP: 5.6.34
 License: MIT
 
@@ -541,6 +541,11 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 == Changelog ==
 
+= 1.10.0 =
+* Fix inconsistencies with logic for MS SQL Server connections
+* Modify the exlog_hook_action_authenticated hook to provide more data from the external database users table
+* Prevent a couple of harmless PHP Notices that clog up error logs. Needs further work
+
 = 1.9.0 =
 * Add exlog_hook_filter_custom_should_exclude hook to allow custom coded user exclusions
 * Fix bug that prevented 'Role Settings' for mapping roles being saved in the database
@@ -629,6 +634,11 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 
 == Upgrade Notice ==
+
+= 1.10.0 =
+* Fix inconsistencies with logic for MS SQL Server connections
+* Modify the exlog_hook_action_authenticated hook to provide more data from the external database users table
+* Prevent a couple of harmless PHP Notices that clog up error logs. Needs further work
 
 = 1.9.0 =
 * Add exlog_hook_filter_custom_should_exclude hook to allow custom coded user exclusions
