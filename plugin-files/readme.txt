@@ -461,9 +461,9 @@ add_action('exlog_hook_action_authenticated', 'my_function_to_do_something_after
 
 This hook allows you to add custom logic to exclude users.
 
-I provides you with all the data for the user that is stored in the external database users table.
-If you return `true` from this function it will prevent the user logging in, and returning `false` will bypass this
-exclusion.
+It provides you with all the data for the user that is stored in the external database users table.
+If you return `true` (or a string - see below regarding custom error messages) from this function it will prevent the
+user logging in, and returning `false` will bypass this exclusion.
 
 For example, let's say your external users table had a field called `expiry` which stored a date. In this example we
 want to block users if they login after their expiry date.
@@ -473,6 +473,14 @@ Adding the following to your `functions.php` would achieve this:
 `
 function myExlogCustomExcluder($userData) {
     return strtotime($userData['expiry']) < strtotime('now');
+}
+add_filter('exlog_hook_filter_custom_should_exclude', 'myExlogCustomExcluder', 10, 1);
+`
+
+Alternatively if you provide a string the user will be blocked and the string will be used as the error for the user.
+`
+function myExlogCustomExcluder($userData) {
+    return strtotime($userData['expiry']) < strtotime('now') ? 'Your account has expired' : false;
 }
 add_filter('exlog_hook_filter_custom_should_exclude', 'myExlogCustomExcluder', 10, 1);
 `

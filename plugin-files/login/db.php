@@ -111,7 +111,12 @@ function exlog_build_query_response($userData, $username, $password, $db_data) {
         "wp_user_data" => null
     );
 
-    if(exlogCustomShouldExcludeUser($userData) || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
+    $should_exclude_user = exlogCustomShouldExcludeUser($userData);
+    if ($should_exclude_user && is_string($should_exclude_user)) {
+        $query_response['error_message'] = $should_exclude_user;
+    }
+
+    if($should_exclude_user || exlogShouldExcludeUserBasedOnSettingsPageExcludeUsersSettings($userData)) {
         return $query_response;
     }
 

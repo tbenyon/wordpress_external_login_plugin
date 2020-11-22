@@ -30,8 +30,9 @@ function exlog_auth( $user, $username, $password ){
 
                 // If user was NOT authenticated
             } else if (!$response["authenticated"]) {
+                $error_message = isset($response['error_message']) ? $response['error_message'] : "Invalid username or password";
                 // User does not exist, send back an error message
-                $user = new WP_Error('denied', __("Invalid username or password"));
+                $user = new WP_Error('denied', __($error_message));
 
                 // If user was authenticated
             } else if ($response["authenticated"]) {
