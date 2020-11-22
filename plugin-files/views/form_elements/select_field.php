@@ -10,7 +10,7 @@
     <select
       id="<?php echo $form_field["field_slug"]; ?>"
       name="<?php echo $form_field["field_slug"]; ?>"
-      <?php if ($form_field["required"]) : ?>
+      <?php if (isset($form_field["required"]) && $form_field["required"]) : ?>
         required
       <?php endif; ?>
     >

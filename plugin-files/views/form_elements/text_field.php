@@ -15,7 +15,7 @@
         type="text"
         name="<?php echo $form_field["field_slug"]; ?>"
         value="<?php echo exlog_get_option($form_field["field_slug"]); ?>"
-        <?php if ($form_field["required"]) : ?>
+        <?php if (isset($form_field["required"]) && $form_field["required"]) : ?>
           required
         <?php endif; ?>
     />
