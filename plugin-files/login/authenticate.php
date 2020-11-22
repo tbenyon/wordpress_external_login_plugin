@@ -38,7 +38,7 @@ function exlog_auth( $user, $username, $password ){
                 // External user exists, try to load the user info from the WordPress user table
                 $userobj = new WP_User();
                 $user = $userobj->get_data_by('login', $response['wp_user_data']['username']); // Does not return a WP_User object 🙁
-                $user = new WP_User($user->ID); // Attempt to load up the user with that ID
+                $user = new WP_User($user ? $user->ID : NULL); // Attempt to load up the user with that ID
 
                 $exlog_userdata = array(
                     'user_login' => $response['wp_user_data']['username'],
