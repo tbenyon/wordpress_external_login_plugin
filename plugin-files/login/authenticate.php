@@ -44,10 +44,16 @@ function exlog_auth( $user, $username, $password ){
                     'user_login' => $response['wp_user_data']['username'],
                     'first_name' => $response['wp_user_data']['first_name'],
                     'last_name'  => $response['wp_user_data']['last_name'],
-                    'user_pass'  => $password,
                     'role'       => $roles[0],
                     'user_email' => $response['wp_user_data']['email'],
                 );
+
+                // Only update the WordPress user's password if it has changed
+                // Without this all other sessions for the user gets cleared
+                $check = wp_authenticate_username_password( NULL, $username , $password );
+                if (is_wp_error( $check )) {
+                    $exlog_userdata['user_pass'] = $password;
+                }
 
                 // If user does not exist
                 if ($user->ID == 0) {
