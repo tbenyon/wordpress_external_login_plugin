@@ -11,6 +11,7 @@ Text Domain: external-login
 
 define( 'EXLOG_PLUGIN_FILE_PATH', __FILE__);
 define( 'EXLOG_PATH_PLUGIN_BASE', __DIR__);
+define( 'EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG', EXLOG_PATH_PLUGIN_BASE . '/freemius_config');
 define( 'EXLOG_PATH_PLUGIN_VIEWS', EXLOG_PATH_PLUGIN_BASE . '/views');
 define( 'EXLOG_PATH_PLUGIN_LOGIN', EXLOG_PATH_PLUGIN_BASE . '/login');
 define( 'EXLOG_PATH_PLUGIN_OPTIONS', EXLOG_PATH_PLUGIN_BASE . '/options');
@@ -23,22 +24,36 @@ define( 'EXLOG_HOOK_FILTER_AUTHENTICATE_HASH', 'exlog_hook_filter_authenticate_h
 define( 'EXLOG_HOOK_FILTER_CUSTOM_EXCLUDE', 'exlog_hook_filter_custom_should_exclude');
 define( 'EXLOG_ROLE_BLOCK_VALUE', 'exlog_block');
 
-include EXLOG_PATH_PLUGIN_OPTIONS . '/wpconfig_options.php';
-include EXLOG_PATH_PLUGIN_SANITISATION_VALIDATION . '/validation.php';
-include EXLOG_PATH_PLUGIN_TOOLS . '/get_roles.php';
-include EXLOG_PATH_PLUGIN_TOOLS . '/map_role.php';
-include EXLOG_PATH_PLUGIN_TOOLS . '/exclude.php';
-include EXLOG_PATH_PLUGIN_LIB . '/Exlog_built_plugin_data.php';
-include EXLOG_PATH_PLUGIN_LIB . '/Exlog_view_building.php';
-include EXLOG_PATH_PLUGIN_LIB . '/Exlog_redirect.php';
-include EXLOG_PATH_PLUGIN_OPTIONS . '/options_external_login.php';
-include EXLOG_PATH_PLUGIN_OPTIONS . '/cleanup.php';
-include EXLOG_PATH_PLUGIN_OPTIONS . '/testing_ajax.php';
-include EXLOG_PATH_PLUGIN_OPTIONS . '/add_plugin_options_links.php';
-include EXLOG_PATH_PLUGIN_LOGIN . '/validate_password.php';
-include EXLOG_PATH_PLUGIN_LOGIN . '/db.php';
-include EXLOG_PATH_PLUGIN_LOGIN . '/authenticate.php';
+if ( ! defined( 'ABSPATH' ) ) {
+    exit;
+}
 
-// Setup redirection hooks
-$exlog_redirection = new Exlog_redirect();
-$exlog_redirection->exlog_setup_redirection();
+if ( function_exists( 'exlog_freemius' ) ) {
+    exlog_freemius()->set_basename( true, __FILE__ );
+} else {
+    if ( ! function_exists( 'exlog_freemius' ) ) { // DO NOT REMOVE THIS
+        include EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG . '/setup.php';
+        include EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG . '/custom_messages.php';
+    }
+
+    include EXLOG_PATH_PLUGIN_OPTIONS . '/wpconfig_options.php';
+    include EXLOG_PATH_PLUGIN_SANITISATION_VALIDATION . '/validation.php';
+    include EXLOG_PATH_PLUGIN_TOOLS . '/get_roles.php';
+    include EXLOG_PATH_PLUGIN_TOOLS . '/map_role.php';
+    include EXLOG_PATH_PLUGIN_TOOLS . '/exclude.php';
+    include EXLOG_PATH_PLUGIN_LIB . '/Exlog_built_plugin_data.php';
+    include EXLOG_PATH_PLUGIN_LIB . '/Exlog_view_building.php';
+    include EXLOG_PATH_PLUGIN_LIB . '/Exlog_redirect.php';
+    include EXLOG_PATH_PLUGIN_OPTIONS . '/options_external_login.php';
+    include EXLOG_PATH_PLUGIN_OPTIONS . '/cleanup.php';
+    include EXLOG_PATH_PLUGIN_OPTIONS . '/testing_ajax.php';
+    include EXLOG_PATH_PLUGIN_OPTIONS . '/add_plugin_options_links.php';
+    include EXLOG_PATH_PLUGIN_LOGIN . '/validate_password.php';
+    include EXLOG_PATH_PLUGIN_LOGIN . '/db.php';
+    include EXLOG_PATH_PLUGIN_LOGIN . '/authenticate.php';
+
+    // Setup redirection hooks
+    $exlog_redirection = new Exlog_redirect();
+    $exlog_redirection->exlog_setup_redirection();
+}
+
