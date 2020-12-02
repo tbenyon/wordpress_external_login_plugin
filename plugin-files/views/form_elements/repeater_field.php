@@ -4,8 +4,8 @@ $exlog_slug = $form_field["field_slug"];
 ?>
 
 <div
-  class="option-container repeater <?php if (!$exlog_view_builder_in_repeater) echo "exlog-repeater-master"; ?>"
-  data-exlog-conditionals="<?php echo htmlspecialchars(json_encode($form_field["conditionals"])); ?>"
+  class="option-container repeater <?php if (!isset($exlog_view_builder_in_repeater)) echo "exlog-repeater-master"; ?>"
+  data-exlog-conditionals="<?php if (isset($form_field["conditionals"])) echo htmlspecialchars(json_encode($form_field["conditionals"])); ?>"
   data-exlog-field-slug="<?php echo $exlog_slug; ?>"
   xmlns="http://www.w3.org/1999/html">
 
@@ -30,7 +30,7 @@ $exlog_slug = $form_field["field_slug"];
 
     <section class="repeater_item" data-exlog-repeater-id="0">
       <div class="repeater_item_input_container">
-        <?php Exlog_view_building::render_field_views($form_field["repeater_fields"], $form_field["slug"]); ?>
+          <?php Exlog_view_building::render_field_views($form_field["repeater_fields"], $form_field["slug"]); ?>
       </div>
       <input class="button button-primary delete_repeater_item" value="X" type="button">
     </section>

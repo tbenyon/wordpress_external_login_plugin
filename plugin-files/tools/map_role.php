@@ -12,10 +12,12 @@ function exlog_map_role($db_role) {
     $role_map = exlog_get_role_mappings();
 
     $wp_roles = array();
-    foreach ($roles as $role) {
-        foreach ($role_map as $map) {
-            if ($map["external_role_value"] == $role) {
-                array_push($wp_roles, $map["wordpress_role_value"]);
+    if (is_array($role_map)) {
+        foreach ($roles as $role) {
+            foreach ($role_map as $map) {
+                if ($map["external_role_value"] == $role) {
+                    array_push($wp_roles, $map["wordpress_role_value"]);
+                }
             }
         }
     }

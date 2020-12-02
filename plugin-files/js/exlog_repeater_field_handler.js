@@ -237,7 +237,9 @@ var possible_repeater_data_master = [
           if ($input.hasClass('exlog_repeater_data_store')) {
             repeater_field = true;
             try {
-              value = JSON.parse(atob(value)); // If the data can be interpreted as JSON convert it to an object
+              if (value) {
+                value = JSON.parse(atob(value)); // If the data can be interpreted as JSON convert it to an object
+              }
             } catch (error) {
               console.log("EXLOG: Error storing repeater data for '" + $input.attr('name') + "'", "Value:", value);
             }

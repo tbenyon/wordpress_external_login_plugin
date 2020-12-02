@@ -3,15 +3,31 @@
         <input
             class="external_role"
             type="text"
-            value="<?php echo $exlog_external_role[$EXLOG_JSON_KEY_EXTERNAL_VALUE]; ?>"
-            name="<?php echo $exlog_external_role[$EXLOG_JSON_KEY_EXTERNAL_NAME]; ?>"
+            value="<?php
+              if (isset($exlog_external_role[$EXLOG_JSON_KEY_EXTERNAL_VALUE])) {
+                  echo $exlog_external_role[$EXLOG_JSON_KEY_EXTERNAL_VALUE];
+              }
+            ?>"
+            name="<?php
+              if (isset($exlog_external_role[$EXLOG_JSON_KEY_EXTERNAL_NAME])) {
+                echo $exlog_external_role[$EXLOG_JSON_KEY_EXTERNAL_NAME];
+              }
+            ?>"
         >
 
-        <select class="wordpress_role" name="<?php echo $exlog_external_role[$EXLOG_JSON_KEY_WORDPRESS_NAME]; ?>">
+        <select
+            class="wordpress_role"
+            name="<?php
+              if(isset($exlog_external_role[$EXLOG_JSON_KEY_WORDPRESS_NAME])) {
+                echo $exlog_external_role[$EXLOG_JSON_KEY_WORDPRESS_NAME];
+              }
+            ?>"
+        >
             <?php $EXLOG_WORDPRESS_AVAILABLE_ROLES[EXLOG_ROLE_BLOCK_VALUE] = "-- BLOCK --"; //Add ability to block based on role ?>
+
             <?php foreach ($EXLOG_WORDPRESS_AVAILABLE_ROLES as $key => $value) : ?>
                 <option
-                    <?php if ($exlog_external_role[$EXLOG_JSON_KEY_WORDPRESS_VALUE] == $key) :?>
+                    <?php if (isset($exlog_external_role[$EXLOG_JSON_KEY_WORDPRESS_VALUE]) && $exlog_external_role[$EXLOG_JSON_KEY_WORDPRESS_VALUE] == $key) :?>
                         selected="selected"
                     <?php endif; ?>
                     value="<?php echo $key; ?>"
@@ -26,6 +42,5 @@
             value="Delete"
             type="button"
         />
-
     </div>
 </div>

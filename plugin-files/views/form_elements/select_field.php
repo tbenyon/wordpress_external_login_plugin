@@ -1,6 +1,6 @@
 <div
   class="option-container"
-  data-exlog-conditionals="<?php echo htmlspecialchars(json_encode($form_field["conditionals"])); ?>"
+  data-exlog-conditionals="<?php if (isset($form_field["conditionals"])) echo htmlspecialchars(json_encode($form_field["conditionals"])); ?>"
 >
   <h4 class="option-title"><?php echo $form_field["field_name"]; ?></h4>
   <p><?php echo $form_field["field_description"]; ?></p>
