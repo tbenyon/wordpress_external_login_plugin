@@ -1,4 +1,4 @@
-FROM wordpress:5.5.0-php7.2-apache
+FROM wordpress:5.5.3-php7.3-apache
 
 # Install SQLSRV plugin
 RUN apt-get update && apt-get install -y gnupg2
