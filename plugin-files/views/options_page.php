@@ -11,16 +11,13 @@
     </div>
     <div class="options_section_container">
       <div class="options_section">
-        <h3>Support</h3>
-        <hr>
-        <ul class="exlog_links">
-          <li class="exlog_link">
-            Having a problem? Need another feature? Add a <a href="https://wordpress.org/support/plugin/external-login">support request</a>.
-          </li>
-          <li class="exlog_link">
-            Finding this useful? Write a <a href="https://wordpress.org/plugins/external-login/#reviews">review</a> or even <a href="https://www.paypal.me/tombenyon">buy me a beer</a>!
-          </li>
-        </ul>
+        <?php
+          if ( exlog_freemius()->is_plan__premium_only(EXLOG_PRO_PLAN_NAME) ) {
+              include EXLOG_PATH_PLUGIN_VIEWS . "/partials/banner_pro_plan.php";
+          } else {
+              include EXLOG_PATH_PLUGIN_VIEWS . "/partials/support_free_plan.php";
+          }
+        ?>
       </div>
     </div>
   </div>

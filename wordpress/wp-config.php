@@ -39,6 +39,9 @@ define( 'DB_CHARSET', 'utf8');
 /** The Database Collate type. Don't change this if in doubt. */
 define( 'DB_COLLATE', '');
 
+/** Freemius settings. */
+define( 'WP_FS__DEV_MODE', true );
+define( 'WP_FS__external-login_SECRET_KEY', 'sk_mySecretKey' );
 
 /**#@+
  * Authentication Unique Keys and Salts.

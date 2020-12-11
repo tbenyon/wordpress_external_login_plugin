@@ -23,6 +23,8 @@ define( 'EXLOG_PATH_ASSETS', plugins_url( '/appAssets/', EXLOG_PLUGIN_FILE_PATH 
 define( 'EXLOG_HOOK_FILTER_AUTHENTICATE_HASH', 'exlog_hook_filter_authenticate_hash');
 define( 'EXLOG_HOOK_FILTER_CUSTOM_EXCLUDE', 'exlog_hook_filter_custom_should_exclude');
 define( 'EXLOG_ROLE_BLOCK_VALUE', 'exlog_block');
+define( 'EXLOG_PRO_PLAN_NAME', 'pro');
+define( 'EXLOG_TEST_PLAN_COOKIE', 'exlog_test_plan');
 
 if ( ! defined( 'ABSPATH' ) ) {
     exit;
@@ -34,6 +36,11 @@ if ( function_exists( 'exlog_freemius' ) ) {
     if ( ! function_exists( 'exlog_freemius' ) ) { // DO NOT REMOVE THIS
         include EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG . '/setup.php';
         include EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG . '/custom_messages.php';
+
+        if (file_exists("/var/www/html/Exlog_freemius_mock.php")) {
+            include "/var/www/html/Exlog_freemius_mock.php";
+        }
+
     }
 
     include EXLOG_PATH_PLUGIN_OPTIONS . '/wpconfig_options.php';
