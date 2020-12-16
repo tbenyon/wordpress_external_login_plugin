@@ -3,8 +3,8 @@ Contributors: tbenyon
 Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
-Tested up to: 5.5.3
-Stable tag: 1.11.0
+Tested up to: 5.6
+Stable tag: 1.11.1
 Requires PHP: 5.6.34
 License: MIT
 
@@ -549,6 +549,9 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 == Changelog ==
 
+= 1.11.1 =
+* Add additional safeguards as some users were unable to use the blocking users based on roles feature
+
 = 1.11.0 =
 * Allow custom error messages to be returned from the exlog_hook_filter_custom_should_exclude hook
 * Allow users to have multiple sessions (so long as their password has not changed)
@@ -647,6 +650,9 @@ Get in contact. I'll normally add simple functionality for free and pretty quick
 
 
 == Upgrade Notice ==
+
+= 1.11.1 =
+* Add additional safeguards as some users were unable to use the blocking users based on roles feature
 
 = 1.11.0 =
 * Allow custom error messages to be returned from the exlog_hook_filter_custom_should_exclude hook
