@@ -30,7 +30,7 @@ $exlog_slug = $form_field["field_slug"];
 
     <section class="repeater_item" data-exlog-repeater-id="0">
       <div class="repeater_item_input_container">
-        <?php Exlog_view_building::render_field_views($form_field["repeater_fields"]); ?>
+          <?php Exlog_view_building::render_field_views($form_field["repeater_fields"], $form_field["slug"]); ?>
       </div>
       <input class="button button-primary delete_repeater_item" value="X" type="button">
     </section>

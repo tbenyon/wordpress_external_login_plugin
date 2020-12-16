@@ -34,19 +34,11 @@
   >
     <h4><?php echo $form_field["field_name"]; ?></h4>
     <p><?php echo $form_field["field_description"]; ?></p>
-    <?php error_log("_"); ?>
-    <?php error_log("_"); ?>
-    <?php error_log("_"); ?>
-    <?php error_log("-------EXLOG LOGS FOR RENE START ---------"); ?>
     <?php if (is_array($exlog_external_roles) && sizeof($exlog_external_roles) > 0) : ?>
       <?php foreach ($exlog_external_roles as $exlog_external_role) : ?>
-            <?php error_log("ROLE!!!"); ?>
-            <?php error_log(var_export($exlog_external_role, true)); ?>
-
             <?php include EXLOG_PATH_PLUGIN_VIEWS . '/form_elements/role_field.php'; ?>
         <?php endforeach; ?>
     <?php endif; ?>
-    <?php //error_log("\n\n\n-------EXLOG LOGS FOR RENE END ---------\n\n\n"); ?>
   </div>
 
   <div class="add_more">
