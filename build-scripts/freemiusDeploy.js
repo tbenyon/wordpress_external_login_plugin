@@ -2,20 +2,12 @@
  * FREEMIUS DEPLOYMENT SCRIPT
  * Inspired by gulp-freemius-deploy (https://github.com/jamesckemp/gulp-freemius-deploy) by James Kemp (https://github.com/jamesckemp)
  */
-// const zip = require("bestzip");
-const needle = require("needle");
 const fs = require("fs");
 const cryptojs = require("crypto-js");
 const decompress = require('decompress');
 const zipper = require('./zipper')
-const archiver = require('archiver');
 const axios = require('axios');
-
-// (async () => {
-//   console.log('before');
-//   const txt = await fs.promises.readFile('yarn-error.log', 'utf-8');
-//   console.log('after', txt);
-// })();
+const FormData = require('form-data');
 
 const DIST_PATH = './dist';
 const ZIPFILE = 'free.zip';
@@ -25,7 +17,7 @@ const FREEMIUS_DEVELOPER_ID = process.env.FREEMIUS_DEVELOPER_ID;
 const FREEMIUS_PLUGIN_ID = process.env.FREEMIUS_PLUGIN_ID;
 const FREEMIUS_PK = process.env.FREEMIUS_PK;
 const FREEMIUS_SK = process.env.FREEMIUS_SK;
-const APIBASE = 'api.freemius.com'; // fast-api?????
+const APIBASE = 'api.freemius.com';
 
 console.log("-------------------");
 console.log("FREEMIUS DEPLOYMENT");
@@ -55,10 +47,36 @@ if (!fs.existsSync(DIST_PATH)){
 })();
 
 function deployZipToFreemius() {
-  console.log("Reading deployment zip...");
-  const buffer = fs.readFileSync(ZIP_FILE_PATH);
-  console.log('tombo', buffer);
+  return getFreemiusAuthTokens()
+    .then((tokens) => {
+      const deployHeader = `FSA ${FREEMIUS_DEVELOPER_ID}:${tokens.access}`;
+      const deployDate = new Date().toUTCString();
+      const deployURI = `/v1/developers/${FREEMIUS_DEVELOPER_ID}/plugins/${FREEMIUS_PLUGIN_ID}/tags.json`;
+      const deployBoundary = "----" + new Date().getTime().toString(16);
 
+      const form = new FormData();
+      form.append('file', fs.createReadStream(ZIP_FILE_PATH));
+
+      const request_config = {
+        headers: {
+          "Content-MD5": "",
+          Date: deployDate,
+          Authorization: deployHeader,
+          ...form.getHeaders()
+        }
+      };
+      return axios.post(
+        `https://${APIBASE}${deployURI}`,
+        form,
+        request_config
+      );
+    })
+    .catch((err) => {
+      console.log('failed upload', err);
+    })
+}
+
+function getFreemiusAuthTokens() {
   console.log("Authenticating...");
 
   const authDate = new Date().toUTCString();
@@ -91,48 +109,6 @@ function deployZipToFreemius() {
   }
 }
 
-  //       const deployHeader = `FSA ${FREEMIUS_DEVELOPER_ID}:${body.access}`;
-  //       const deployDate = new Date().toUTCString();
-  //       const deployURI = `/v1/developers/${FREEMIUS_DEVELOPER_ID}/plugins/${FREEMIUS_PLUGIN_ID}/tags.json`;
-  //       const deployBoundary = "----" + new Date().getTime().toString(16);
-  //
-  //
-  //       console.log("Uploading...");
-  //       needle.post(
-  //         `https://${APIBASE}${deployURI}`,
-  //         {
-  //           data: JSON.stringify({ add_contributor: false }),
-  //           file: {
-  //             buffer: buffer,
-  //             filename: ZIPFILE,
-  //             content_type: "application/zip",
-  //           },
-  //         },
-  //         {
-  //           open_timeout: 90000,
-  //           stream_length: 0,
-  //           multipart: true,
-  //           boundary: deployBoundary,
-  //           headers: {
-  //             "Content-MD5": "",
-  //             Date: deployDate,
-  //             Authorization: deployHeader,
-  //           },
-  //         },
-  //         function (error, response, body) {
-  //           if (error) {
-  //             console.dir(error);
-  //             console.log("\x1b[31m%s\x1b[0m", "Upload error!");
-  //
-  //             return;
-  //           }
-  //
-  //           if (typeof body === "object") {
-  //             if (typeof body.error !== "undefined") {
-  //               console.log("\x1b[31m%s\x1b[0m", `Upload failed (${body.error.message})!`);
-  //
-  //               return;
-  //             }
   //
   //             if (body.id) {
   //               console.log(`Downloading v${body.version} from Freemius...`);
