@@ -27,9 +27,6 @@ if ( ! function_exists( 'exlog_freemius' ) ) {
                         'slug' => 'options-general.php',
                     ),
                 ),
-                // Set the SDK to work in a sandbox mode (for development & testing).
-                // IMPORTANT: MAKE SURE TO REMOVE SECRET KEY BEFORE DEPLOYMENT.
-                'secret_key'          => 'sk_4ue0R>I((LVt-k#!h!<pc8sr!N;a2',
             ) );
         }
 
