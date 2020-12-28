@@ -9,29 +9,35 @@ const zipper = require('./zipper')
 const axios = require('axios');
 const FormData = require('form-data');
 
-const DIST_PATH = './dist';
-const ZIPFILE = 'free.zip';
-const ZIP_FILE_PATH = `${DIST_PATH}/${ZIPFILE}`;
-const PLUGIN_FILES_SRC_PATH = '../plugin-files/'
 const FREEMIUS_DEVELOPER_ID = process.env.FREEMIUS_DEVELOPER_ID;
 const FREEMIUS_PLUGIN_ID = process.env.FREEMIUS_PLUGIN_ID;
 const FREEMIUS_PK = process.env.FREEMIUS_PK;
 const FREEMIUS_SK = process.env.FREEMIUS_SK;
+
+const PLUGIN_FILES_SRC_PATH = '../plugin-files/';
+const SRC_BUILD_ARTEFACTS_DIR = './build_artefacts';
+const SRC_ZIP_FILE = 'src.zip';
+const SRC_ZIP_PATH = `${SRC_BUILD_ARTEFACTS_DIR}/${SRC_ZIP_FILE}`;
+const DIST_DIR = '../dist';
+const DIST_FREE_ZIP_FILE = 'free.zip';
+const DIST_FREE_DIR = `${DIST_DIR}/free`;
 const APIBASE = 'api.freemius.com';
 
 console.log("-------------------");
 console.log("FREEMIUS DEPLOYMENT");
 console.log("-------------------");
 
-console.log(`\nCreating deployment zip (${ZIPFILE})...`);
+console.log(`\nCreating deployment zip (${SRC_ZIP_FILE})...`);
 
-if (!fs.existsSync(DIST_PATH)){
-  fs.mkdirSync(DIST_PATH);
-}
+[SRC_BUILD_ARTEFACTS_DIR, DIST_DIR].forEach((dir) => {
+  if (!fs.existsSync(dir)){
+    fs.mkdirSync(dir);
+  }
+});
 
 (async function () {
   try {
-    await zipper.zip(PLUGIN_FILES_SRC_PATH, ZIP_FILE_PATH);
+    await zipper.zip(PLUGIN_FILES_SRC_PATH, SRC_ZIP_PATH);
   } catch(e) {
     console.log('Unable to Zip plugin\n', e);
     process.exit(1);
@@ -41,6 +47,7 @@ if (!fs.existsSync(DIST_PATH)){
   try {
     tokens = await getFreemiusAuthTokens();
     if (!tokens.access) throw new Error('No access token returned');
+    console.log('Successfully authenticated');
   } catch (e) {
     console.error('Could not authenticate with Freemius');
     process.exit(2);
@@ -51,6 +58,7 @@ if (!fs.existsSync(DIST_PATH)){
 
   let versionData;
   try {
+    console.log('Deploying to Freemius...');
     versionData = await deployZipToFreemius(deployHeader, deployDate);
   } catch (e) {
     console.log('Unable to deploy version\n', e);
@@ -58,6 +66,7 @@ if (!fs.existsSync(DIST_PATH)){
   }
 
   try {
+    console.log('Downloading built files...');
     await downloadFreemiusCompiledBuild(versionData, deployHeader, deployDate);
   } catch (e) {
     console.log('Unable to fetch Freemius built version\n', e);
@@ -70,7 +79,7 @@ function deployZipToFreemius(deployHeader, deployDate) {
     const deployBoundary = "----" + new Date().getTime().toString(16);
 
     const form = new FormData();
-    form.append('file', fs.createReadStream(ZIP_FILE_PATH));
+    form.append('file', fs.createReadStream(SRC_ZIP_PATH));
 
     const request_config = {
       headers: {
@@ -141,16 +150,16 @@ function downloadFreemiusCompiledBuild(versionData, deployHeader, deployDate) {
     },
     responseType: 'stream'
   }).then(response => {
-    console.log('starting writing download to file');
-    const writer = fs.createWriteStream('dist/zippy.zip')
+    const DIST_FREE_ZIP_FILE = 'free.zip';
+    const writer = fs.createWriteStream(`${DIST_DIR}/${DIST_FREE_ZIP_FILE}`)
     response.data.pipe(writer);
     return new Promise((resolve, reject) => {
       writer.on('finish', resolve)
       writer.on('error', reject)
     })
   }).then(() => {
-    console.log('starting decompress');
-    decompress('dist/zippy.zip', "artifacts").then(function() {
+    decompress(`${DIST_DIR}/${DIST_FREE_ZIP_FILE}`, DIST_FREE_DIR)
+      .then(function() {
       console.log(`Plugin v${versionData.version} successfully downloaded`);
     });
   })
