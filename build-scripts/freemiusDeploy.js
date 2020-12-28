@@ -31,105 +31,20 @@ console.log("FREEMIUS DEPLOYMENT");
 console.log("-------------------");
 
 console.log(`\nCreating deployment zip (${ZIPFILE})...`);
-//
-// const zip = (readPath, writePath) => {
-//   console.log('zipppppp')
-//   const outputStream = fs.createWriteStream(__dirname + writePath);
-//   const archive = archiver('zip', {
-//     zlib: {level: 9} // Sets the compression level.
-//   });
-//
-//   console.log('zipppppp2')
-//   archive.pipe(outputStream);
-//
-//   archive.directory(readPath, false);
-//
-//   const promise = archive.finalize();
-//   console.log('zipppppp3', promise)
-//   return promise;
-// }
-const zip = (readPath, writePath) => {
-  return new Promise((resolve, reject) => {
-    console.log('zipppppp')
-    const outputStream = fs.createWriteStream(__dirname + writePath);
-    const archive = archiver('zip', {
-      zlib: {level: 9} // Sets the compression level.
-    });
-
-    // listen for all archive data to be written
-// 'close' event is fired only when a file descriptor is involved
-    outputStream.on('close', function() {
-      console.log(archive.pointer() + ' total bytes');
-      console.log('archiver has been finalized and the output file descriptor has closed.');
-      resolve(archive.pointer());
-    });
-
-// This event is fired when the data source is drained no matter what was the data source.
-// It is not part of this library but rather from the NodeJS Stream API.
-// @see: https://nodejs.org/api/stream.html#stream_event_end
-    outputStream.on('end', function() {
-      console.log('Data has been drained');
-    });
-
-// good practice to catch warnings (ie stat failures and other non-blocking errors)
-    archive.on('warning', function(err) {
-      reject(err);
-    });
-
-    archive.on('error', function(err) {
-      reject(err);
-    });
-
-    console.log('zipppppp2')
-    archive.pipe(outputStream);
-
-    archive.directory(readPath, false);
-
-    const promise = archive.finalize();
-    console.log('zipppppp3', promise)
-    return promise;
-  })
-}
 
 if (!fs.existsSync(DIST_PATH)){
   fs.mkdirSync(DIST_PATH);
 }
 
-// zip({
-//   source: `${PLUGIN_FILES_SRC_PATH}/*`,
-//   destination: ZIP_FILE_PATH,
-// })
-
-console.log('hmmmmm111');
-
 (async function () {
   try {
-
-    const promise = zip(PLUGIN_FILES_SRC_PATH, ZIP_FILE_PATH);
-    console.log(promise);
-    // setInterval(() => console.log(promise), 100)
-    console.log('before await');
-    const result = await promise;
-    console.log('after await', result);
+    await zipper.zip(PLUGIN_FILES_SRC_PATH, ZIP_FILE_PATH);
   } catch(e) {
-    console.log('uhh!!!!!!!');
+    console.log('Unable to Zip plugin\n', e);
     process.exit(1);
   }
-  console.log('end of try catch')
 })();
 
-console.log('hmmmmm222');
-
-(async () => {
-  await new Promise((resolve) => {
-    setTimeout(() => {
-      console.log('timeout finished');
-      resolve();
-    }, 5000)
-  })
-})();
-
-console.log('hmmmmm333');
 
 // zipper.zip(PLUGIN_FILES_SRC_PATH, ZIP_FILE_PATH)
 //   .then(function () {
