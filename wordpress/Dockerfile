@@ -13,5 +13,5 @@ RUN pecl install pdo_sqlsrv
 RUN printf "extension=sqlsrv.so\n; extension=pdo_sqlsrv.so;\n" > /usr/local/etc/php/php.ini
 
 COPY wp-config.php /var/www/html/
-COPY Exlog_freemius_mock.php /var/www/html/
+#COPY Exlog_freemius_mock.php /var/www/html/
 #COPY external-login-settings.php /var/www/html/

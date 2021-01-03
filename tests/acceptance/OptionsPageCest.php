@@ -9,7 +9,8 @@ class OptionsPageCest
         $I->amOnPage('/wp-login.php?action=logout');
     }
 
-    public function seeProBannerIfAsAProUser(AcceptanceTester $I)
+    // Commented this out for now with the underscore as WIP
+    public function _seeProBannerIfAsAProUser(AcceptanceTester $I)
     {
         $I->setCookie('exlog_test_plan', 'pro');
         $I->amOnPage('/wp-login.php');

@@ -41,7 +41,6 @@ define( 'DB_COLLATE', '');
 
 /** Freemius settings. */
 define( 'WP_FS__DEV_MODE', true );
-define( 'WP_FS__external-login_SECRET_KEY', 'sk_mySecretKey' );
 
 /**#@+
  * Authentication Unique Keys and Salts.

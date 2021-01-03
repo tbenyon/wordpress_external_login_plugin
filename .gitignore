@@ -4,3 +4,4 @@ vendor
 .DS_Store
 build-scripts/build_artefacts
 dist
+yarn-error.log

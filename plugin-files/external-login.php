@@ -37,9 +37,10 @@ if ( function_exists( 'exlog_freemius' ) ) {
         include EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG . '/setup.php';
         include EXLOG_PATH_PLUGIN_FREEMIUS_CONFIG . '/custom_messages.php';
 
-        if (file_exists("/var/www/html/Exlog_freemius_mock.php")) {
-            include "/var/www/html/Exlog_freemius_mock.php";
-        }
+        // May integrate this to help local development later
+//        if (file_exists("/var/www/html/Exlog_freemius_mock.php")) {
+//            include "/var/www/html/Exlog_freemius_mock.php";
+//        }
 
     }
 
