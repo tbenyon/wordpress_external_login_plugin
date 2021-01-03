@@ -4,6 +4,7 @@ jobs:
     docker:
       - image: cimg/node:14.15.1
     steps:
+      - checkout
       - run:
           name: Build Free
           command: node ./build-scripts/freemiusDeploy.js
