@@ -10,7 +10,7 @@ jobs:
           command: cd build-scripts && yarn
       - run:
           name: Build Free
-          command: node ./build-scripts/freemiusDeploy.js
+          command: cd build-scripts && node freemiusDeploy.js
   test:
     machine:
         image: ubuntu-1604:201903-01
