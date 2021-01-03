@@ -1,8 +1,8 @@
 version: 2.0
 jobs:
   build:
-    machine:
-      image: cimg/node:14.15.3
+    docker:
+      - image: cimg/node:14.15.1
     steps:
       - run:
           name: Build Free
