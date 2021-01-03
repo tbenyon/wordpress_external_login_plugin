@@ -6,6 +6,9 @@ jobs:
     steps:
       - checkout
       - run:
+          name: Install Build Dependencies
+          command: cd build-scripts && yarn
+      - run:
           name: Build Free
           command: node ./build-scripts/freemiusDeploy.js
   test:
