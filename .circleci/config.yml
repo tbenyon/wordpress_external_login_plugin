@@ -13,17 +13,17 @@ jobs:
           command: cd build-scripts && node freemiusDeploy.js
       - store_artifacts:
           path: /dist
-  test:
-    machine:
-        image: ubuntu-1604:201903-01
-    steps:
-      - checkout
-      - run:
-          name: CI Setup
-          command: sudo ./build-scripts/ciSetup.sh
-      - run:
-          name: Run Tests
-          command: npm run ci-test
+#  test:
+#    machine:
+#        image: ubuntu-1604:201903-01
+#    steps:
+#      - checkout
+#      - run:
+#          name: CI Setup
+#          command: sudo ./build-scripts/ciSetup.sh
+#      - run:
+#          name: Run Tests
+#          command: npm run ci-test
 
 workflows:
   version: 2
