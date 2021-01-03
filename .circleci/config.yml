@@ -11,6 +11,8 @@ jobs:
       - run:
           name: Build Free
           command: cd build-scripts && node freemiusDeploy.js
+      - store_artifacts:
+          path: /dist
   test:
     machine:
         image: ubuntu-1604:201903-01
