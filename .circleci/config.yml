@@ -23,7 +23,7 @@ jobs:
       - checkout
       - attach_workspace:
           # Must be absolute path or relative path from working_directory
-          at: ./
+          at: ./build-scripts
       - run:
           name: Testingggg
           command: ls && cat freemiusDeployVersion.json
