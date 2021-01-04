@@ -15,7 +15,6 @@ const PLUGIN_FILES_SRC_PATH = '../plugin-files/';
 const SRC_BUILD_ARTEFACTS_DIR = './build_artefacts';
 const SRC_ZIP_FILE = 'src.zip';
 const SRC_ZIP_PATH = `${SRC_BUILD_ARTEFACTS_DIR}/${SRC_ZIP_FILE}`;
-const DIST_DIR = '../dist';
 const APIBASE = 'api.freemius.com';
 
 console.log("-------------------");
@@ -23,11 +22,9 @@ console.log("FREEMIUS DEPLOYMENT");
 console.log("-------------------");
 
 
-[SRC_BUILD_ARTEFACTS_DIR, DIST_DIR].forEach((dir) => {
-  if (!fs.existsSync(dir)){
-    fs.mkdirSync(dir);
-  }
-});
+if (!fs.existsSync(SRC_BUILD_ARTEFACTS_DIR)){
+  fs.mkdirSync(SRC_BUILD_ARTEFACTS_DIR);
+}
 
 (async function () {
   try {

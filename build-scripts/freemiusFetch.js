@@ -19,6 +19,10 @@ console.log("-------------------");
 console.log("FETCHING FREEMIUS BUILD");
 console.log("-------------------");
 
+if (!fs.existsSync(DIST_DIR)){
+  fs.mkdirSync(DIST_DIR);
+}
+
 (async function () {
   let versionData;
   try {
