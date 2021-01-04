@@ -17,8 +17,8 @@ jobs:
             - ./freemiusDeployVersion.json
 
   test:
-    machine:
-        image: ubuntu-1604:201903-01
+    docker:
+      - image: cimg/node:14.15.1
     steps:
       - checkout
       - attach_workspace:
