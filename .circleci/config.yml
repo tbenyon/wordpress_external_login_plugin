@@ -15,6 +15,7 @@ jobs:
           root: ./build-scripts
           paths:
             - ./freemiusDeployVersion.json
+            - ./node_modules
 
   test:
     docker:
