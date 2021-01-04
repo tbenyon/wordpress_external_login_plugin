@@ -17,20 +17,28 @@ jobs:
             - ./freemiusDeployVersion.json
             - ./node_modules
 
-  test:
+  fetchFreemiusBuild:
+    - checkout
     docker:
       - image: cimg/node:14.15.1
     steps:
-      - checkout
       - attach_workspace:
-          # Must be absolute path or relative path from working_directory
           at: ./build-scripts
-      - run:
-          name: Testingggg
-          command: cd build-scripts && ls && cat freemiusDeployVersion.json
       - run:
           name: Fetch Freemius
           command: cd build-scripts && node freemiusFetch.js
+      - persist_to_workspace:
+          root: ./
+          paths:
+            - ./dist
+
+  test:
+    machine:
+        image: ubuntu-1604:201903-01
+    steps:
+      - attach_workspace:
+          at: ./
+      - checkout
       - run:
           name: CI Setup
           command: sudo ./build-scripts/ciSetup.sh
@@ -43,6 +51,9 @@ workflows:
   btd:
     jobs:
       - deployToFreemius
-      - test:
+      - fetchFreemiusBuild:
           requires:
             - deployToFreemius
+      - test:
+          requires:
+            - fetchFreemiusBuild
