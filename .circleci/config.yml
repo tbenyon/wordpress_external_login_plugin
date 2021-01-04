@@ -12,6 +12,7 @@ jobs:
           name: Deploy
           command: cd build-scripts && node freemiusDeploy.js
       - persist_to_workspace:
+          root: .
           paths:
             - ./freemiusDeployVersion.json
 
