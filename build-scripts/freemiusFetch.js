@@ -25,6 +25,9 @@ console.log("-------------------");
     console.log('Fetching version data from disk...');
     const rawdata = fs.readFileSync('freemiusDeployVersion.json');
     versionData = JSON.parse(rawdata);
+  } catch (e) {
+    console.log('Unable to fetch Freemius version data\n', e);
+    process.exit(1);
   }
 
   try {
@@ -32,7 +35,7 @@ console.log("-------------------");
     await downloadFreemiusCompiledBuild(versionData);
   } catch (e) {
     console.log('Unable to fetch Freemius built version\n', e);
-    process.exit(1);
+    process.exit(2);
   }
 })();
 
@@ -43,7 +46,7 @@ async function downloadFreemiusCompiledBuild(versionData) {
     console.log('Successfully authenticated');
   } catch (e) {
     console.error('Could not authenticate with Freemius');
-    process.exit(2);
+    process.exit(3);
   }
 
   if (!versionData.id) throw new Error('Invalid version data returned');
