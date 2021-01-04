@@ -5,7 +5,7 @@
 const fs = require("fs");
 const decompress = require('decompress');
 const axios = require('axios');
-const { getAuthHeaderValue } = require('./freemiusAuthenticate')
+const { getAuthHeaderValue } = require('./freemiusAuthenticate');
 
 const FREEMIUS_DEVELOPER_ID = process.env.FREEMIUS_DEVELOPER_ID;
 const FREEMIUS_PLUGIN_ID = process.env.FREEMIUS_PLUGIN_ID;
