@@ -26,7 +26,7 @@ jobs:
           at: ./build-scripts
       - run:
           name: Testingggg
-          command: ls && cat freemiusDeployVersion.json
+          command: cd build-scripts && ls && cat freemiusDeployVersion.json
       - run:
           name: Fetch Freemius
           command: cd build-scripts && node freemiusFetch.js
