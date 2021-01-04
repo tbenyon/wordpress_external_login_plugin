@@ -1,6 +1,6 @@
 version: 2.0
 jobs:
-  build:
+  deployToFreemius:
     docker:
       - image: cimg/node:14.15.1
     steps:
@@ -9,26 +9,39 @@ jobs:
           name: Install Build Dependencies
           command: cd build-scripts && yarn
       - run:
-          name: Build Free
+          name: Deploy
           command: cd build-scripts && node freemiusDeploy.js
-      - store_artifacts:
-          path: dist
-#  test:
-#    machine:
-#        image: ubuntu-1604:201903-01
-#    steps:
-#      - checkout
-#      - run:
-#          name: CI Setup
-#          command: sudo ./build-scripts/ciSetup.sh
-#      - run:
-#          name: Run Tests
-#          command: npm run ci-test
+      - persist_to_workspace:
+          root: workspace
+          paths:
+            - ./freemiusDeployVersion.json
+
+  test:
+    machine:
+        image: ubuntu-1604:201903-01
+    steps:
+      - checkout
+      - attach_workspace:
+          # Must be absolute path or relative path from working_directory
+          at: ./
+      - run:
+          name: Testingggg
+          command: ls && cat freemiusDeployVersion.json
+      - run:
+          name: Fetch Freemius
+          command: cd build-scripts && node freemiusFetch.js
+      - run:
+          name: CI Setup
+          command: sudo ./build-scripts/ciSetup.sh
+      - run:
+          name: Run Tests
+          command: npm run ci-test
 
 workflows:
   version: 2
-
   btd:
     jobs:
-      - build
-#      - test
+      - deployToFreemius
+      - test:
+          requires:
+            - deployToFreemius

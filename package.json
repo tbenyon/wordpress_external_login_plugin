@@ -4,15 +4,16 @@
   "description": "See readme.txt for the main information for the plugin. This is done to save duplication as readme.txt is required for WordPress plugin repository.",
   "main": "gulpfile.js",
   "scripts": {
-    "up": "docker-compose up --build -d",
+    "up": "LOCAL_PLUGIN_PATH='./plugin-files/' npm run dockerComposeRunner",
     "down": "docker-compose down",
     "restart": "npm run down && npm run up",
+    "dockerComposeRunner": "docker-compose up --build -d",
     "frontend": "gulp",
     "deploy": "./deploy.sh",
     "settingsDefault": "php -r \"require './utils/SettingsBuilder.php'; require './tests/acceptance/DatabaseTools.php'; SettingsBuilder::setDefaultSettings();\"",
     "test": "php vendor/bin/codecept run --steps",
     "test-debug": "php vendor/bin/codecept run --steps --debug",
-    "ci-test": "npm run up && php tests/acceptance/HealthChecks.php && dockerize -wait http://localhost:8000 -timeout 1m && npm run test"
+    "ci-test": "LOCAL_PLUGIN_PATH='./dist/free/external-login' npm run dockerComposeRunner && php tests/acceptance/HealthChecks.php && dockerize -wait http://localhost:8000 -timeout 1m && npm run test"
   },
   "repository": {
     "type": "git",

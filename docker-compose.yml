@@ -77,7 +77,7 @@ services:
       - "8000:80"
     restart: always
     volumes:
-      - ./plugin-files/:/var/www/html/wp-content/plugins/external-login
+      - ${LOCAL_PLUGIN_PATH}:/var/www/html/wp-content/plugins/external-login
     environment:
       WORDPRESS_DB_HOST: db:3306
       WORDPRESS_DB_USER: wordpress
