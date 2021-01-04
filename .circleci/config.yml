@@ -36,9 +36,9 @@ jobs:
     machine:
         image: ubuntu-1604:201903-01
     steps:
+      - checkout
       - attach_workspace:
           at: ./
-      - checkout
       - run:
           name: CI Setup
           command: sudo ./build-scripts/ciSetup.sh
