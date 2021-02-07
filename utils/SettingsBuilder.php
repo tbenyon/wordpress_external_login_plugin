@@ -4,7 +4,7 @@ class SettingsBuilder {
 
     function __construct() {}
 
-    function setDefaultSettings() {
+    static function setDefaultSettings() {
         $conn = DatabaseTools::_generateWordpressConnection();
         foreach (SettingsBuilder::defaultSettings() as $settingName => $settingValue) {
             SettingsBuilder::setSetting($settingName, $settingValue, $conn);
@@ -12,7 +12,7 @@ class SettingsBuilder {
         $conn = null;
     }
 
-    function setSetting($settingName, $settingValue, $externalConnection = false) {
+    static function setSetting($settingName, $settingValue, $externalConnection = false) {
         $conn = $externalConnection ? $externalConnection : DatabaseTools::_generateWordpressConnection();
         $query_string = "INSERT INTO wp_options (option_name,option_value) VALUES ( :settingName, :settingValue ) ON DUPLICATE KEY UPDATE option_value=:settingValue";
         $pdoStatement = $conn->prepare($query_string);
@@ -20,7 +20,7 @@ class SettingsBuilder {
         if (!$externalConnection) $conn = null;
     }
 
-    function deleteAllPluginSettings() {
+    static function deleteAllPluginSettings() {
         $conn = DatabaseTools::_generateWordpressConnection();
         $query_string = "DELETE FROM `wp_options` WHERE option_name =:optionName;";
         $pdoStatement  = $conn->prepare($query_string);
@@ -30,7 +30,7 @@ class SettingsBuilder {
         $conn = null;
     }
 
-    function defaultSettings() {
+    static function defaultSettings() {
         return array(
             'external_login_option_enable_external_login' => 'on',
             'external_login_option_migration_mode' => '',

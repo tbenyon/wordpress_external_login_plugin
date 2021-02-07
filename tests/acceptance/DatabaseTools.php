@@ -1,7 +1,7 @@
 <?php
 
 class DatabaseTools {
-    function _generateWordpressConnection() {
+    static function _generateWordpressConnection() {
         return DatabaseTools::_generateConnection(
             "mysql",
             '127.0.0.1',
@@ -12,7 +12,7 @@ class DatabaseTools {
         );
     }
 
-    function _generateExternalMysqlConnection() {
+    static function _generateExternalMysqlConnection() {
         return DatabaseTools::_generateConnection(
             "mysql",
             '127.0.0.1',
@@ -23,7 +23,7 @@ class DatabaseTools {
         );
     }
 
-    private function _generateConnection($driver, $host_name, $user_name, $password, $db_name, $port) {
+    static private function _generateConnection($driver, $host_name, $user_name, $password, $db_name, $port) {
         try {
             $options = [
                 PDO::ATTR_ERRMODE            => PDO::ERRMODE_EXCEPTION,

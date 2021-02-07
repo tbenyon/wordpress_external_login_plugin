@@ -12,11 +12,11 @@ class ExternalDatabaseUserBuilder {
         $this->state = 'active';
     }
 
-    private function generatePasswordHash($password) {
+    static private function generatePasswordHash($password) {
         return password_hash($password, PASSWORD_BCRYPT);
     }
 
-    function _generateUsername() {
+    static function _generateUsername() {
         return substr(uniqid("user-"), 0, 20);
     }
 
