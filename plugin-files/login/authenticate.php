@@ -91,6 +91,7 @@ function exlog_auth( $user, $username, $password ){
         // - The user was found but the password was rejected
         if (exlog_get_option('external_login_option_disable_local_login') == "on" || is_wp_error($user)) {
             remove_action('authenticate', 'wp_authenticate_username_password', 20);
+            remove_action('authenticate', 'wp_authenticate_email_password', 20);
         }
     }
 
