@@ -1,6 +1,6 @@
 <?php
 
-function exlog_map_role($db_role) {
+function exlog_map_role($db_role, $username, $userData) {
     $delimiter = exlog_get_option("exlog_multiple_roles_delimiter");
     $delimiter = str_replace("{{space}}", " ", $delimiter);
     if (exlog_get_option("exlog_multiple_roles_toggle") == "on" && $delimiter != "") {
@@ -19,6 +19,19 @@ function exlog_map_role($db_role) {
                     array_push($wp_roles, $map["wordpress_role_value"]);
                 }
             }
+        }
+    }
+
+    if (has_filter(EXLOG_HOOK_FILTER_ASSIGN_ROLES)) {
+        $wp_roles = apply_filters(
+            EXLOG_HOOK_FILTER_ASSIGN_ROLES,
+            $wp_roles,
+            $username,
+            $userData
+        );
+
+        if (is_string($wp_roles)) {
+            $wp_roles = Array($wp_roles);
         }
     }
 

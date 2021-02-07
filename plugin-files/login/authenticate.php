@@ -11,7 +11,9 @@ function exlog_auth( $user, $username, $password ){
         $response = exlog_auth_query($username, $password);
 
         $roles = exlog_map_role(
-            isset($response['wp_user_data']['role']) ? $response['wp_user_data']['role'] : ""
+            isset($response['wp_user_data']['role']) ? $response['wp_user_data']['role'] : "",
+            $username,
+            $response
         );
 
         $block_access_due_to_role = true;

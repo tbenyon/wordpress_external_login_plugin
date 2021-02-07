@@ -9,6 +9,7 @@
     "restart": "npm run down && npm run up",
     "frontend": "gulp",
     "deploy": "./deploy.sh",
+    "streamLogs": "docker logs exlog_SERVER_wordpress -f",
     "settingsDefault": "php -r \"require './utils/SettingsBuilder.php'; require './tests/acceptance/DatabaseTools.php'; SettingsBuilder::setDefaultSettings();\"",
     "test": "php vendor/bin/codecept run --steps",
     "test-debug": "php vendor/bin/codecept run --steps --debug",

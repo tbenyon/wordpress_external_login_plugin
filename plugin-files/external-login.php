@@ -20,6 +20,7 @@ define( 'EXLOG_PATH_PLUGIN_SANITISATION_VALIDATION', EXLOG_PATH_PLUGIN_BASE . '/
 define( 'EXLOG_PATH_ASSETS', plugins_url( '/appAssets/', EXLOG_PLUGIN_FILE_PATH ));
 
 define( 'EXLOG_HOOK_FILTER_AUTHENTICATE_HASH', 'exlog_hook_filter_authenticate_hash');
+define( 'EXLOG_HOOK_FILTER_ASSIGN_ROLES', 'exlog_hook_filter_assign_roles');
 define( 'EXLOG_HOOK_FILTER_CUSTOM_EXCLUDE', 'exlog_hook_filter_custom_should_exclude');
 define( 'EXLOG_ROLE_BLOCK_VALUE', 'exlog_block');
 

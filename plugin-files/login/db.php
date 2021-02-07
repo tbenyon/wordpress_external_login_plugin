@@ -1,6 +1,10 @@
 <?php
 
-function exlog_get_external_db_instance_and_fields($dbType) {
+function exlog_get_external_db_instance_and_fields($dbType = false) {
+    if (!$dbType) {
+        $dbType = exlog_get_option('external_login_option_db_type');
+    }
+
 	try {
 		$host = exlog_get_option("external_login_option_db_host");
 		$port = exlog_get_option("external_login_option_db_port");

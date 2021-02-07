@@ -152,6 +152,61 @@ function myExlogHashAuthenticator($password, $hashFromDatabase, $username, $exte
 add_filter('exlog_hook_filter_authenticate_hash', 'myExlogHashAuthenticator', 10, 4);
 ```
 
+### Filter: exlog_hook_filter_assign_roles
+This hook is used to add additional roles to a user with custom logic and potentially custom queries.
+
+This hook provides the user with a range of different information:
+- `$roles` - the array of roles already mapped using the built in logic based on data set it the admin panel
+- `$username` - the username that was typed in the login screen
+- `$userData` - the data that was originally queried for the user
+
+It is expected that you will return an array of roles.
+
+The below example assumes that you want to use the roles derived from the built in logic and add to it.
+For this reason new roles are added onto the passed array and that is returned.
+If you want to ignore what the logic currently provides you could simply pass a new array.
+
+The below is a relatively complex example that shows how you could write your own query to fetch data and use that to add WordPress roles.
+```
+function myExlogRolesMapper($roles, $username, $userData) {
+    // Uses the data provided to the plugin to create the database object and data required for a query
+    $db_data = exlog_get_external_db_instance_and_fields();
+
+    // Start building a query to fetch the user
+    // This is the first bit you will want to modify to select data from your additional table where the role is being stored
+    $query_string =
+        'SELECT *' .
+        // This is specifying the table specified in the settings panel, you can hard code these if you rather
+        ' FROM ' . esc_sql($db_data["dbstructure_table"]) .
+        // This finds the correct user based on the username field set in the settings and the username that they typed in
+        ' WHERE (' . esc_sql($db_data["dbstructure_username"]) . '="' . esc_sql($username) . '"';
+
+    if ($db_data["dbstructure_email"]) {
+        // Because the username they type in can be an e-mail, if you have set an e-mail field in the settings panel we will also try and find the user by e-mail
+        $query_string .= ' OR ' . esc_sql($db_data["dbstructure_email"]) . '="' . esc_sql($username) . '")';
+    } else {
+        $query_string .= ')';
+    }
+
+    // Use the above computed query actually fetch the data
+    $rows = $db_data["db_instance"]->get_results($query_string, ARRAY_A);
+
+    // Checking if a user was found
+    if ($rows && count($rows) > 0) {
+        $foundData = $rows[0];
+        // If the custom field in your database called 'myCustomRoleField' has 'editingKing' stored in it
+        if ($foundData['myCustomRoleField'] == 'editingKing') {
+            // Add the wordpress role 'editor' to the user
+            array_push($roles, "editor");
+        }
+    }
+
+    // return the array of roles as WordPress supports multiple roles in the backend even though their settings pane only shows one
+    return $roles;
+}
+add_filter('exlog_hook_filter_assign_roles', 'myExlogRolesMapper', 10, 3);
+```
+
 ## Special Thanks
 A special thank you to Ben Lobaugh for a [great article](https://ben.lobaugh.net/blog/7175/wordpress-replace-built-in-user-authentication) which I used heavily for this plugin.
 
