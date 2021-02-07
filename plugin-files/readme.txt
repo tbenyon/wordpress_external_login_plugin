@@ -3,8 +3,8 @@ Contributors: tbenyon
 Donate link: https://www.paypal.me/tombenyon
 Tags: external login, external, database, login, users, db, WordPress, different, username, password, hashing, md, md2, md4, md5, bcrypt, sha, sha1, sha256, sha384, sha512
 Requires at least: 4.6
-Tested up to: 5.6
-Stable tag: 1.11.1
+Tested up to: 5.6.1
+Stable tag: 1.11.2
 Requires PHP: 5.6.34
 License: MIT
 
@@ -613,6 +613,11 @@ Get in contact on the support forum and we can discuss it :)
 
 == Changelog ==
 
+= 1.11.2 =
+* Add hook to allow custom manipulation of roles
+* Fix bug that meant preventing fall back to the WordPress login only worked from username logins and not e-mails
+* Add better explanation regarding cropped strings in the test connection output
+
 = 1.11.1 =
 * Add additional safeguards as some users were unable to use the blocking users based on roles feature
 
@@ -714,6 +719,11 @@ Get in contact on the support forum and we can discuss it :)
 
 
 == Upgrade Notice ==
+
+= 1.11.2 =
+* Add hook to allow custom manipulation of roles
+* Fix bug that meant preventing fall back to the WordPress login only worked from username logins and not e-mails
+* Add better explanation regarding cropped strings in the test connection output
 
 = 1.11.1 =
 * Add additional safeguards as some users were unable to use the blocking users based on roles feature

@@ -175,6 +175,11 @@ body.settings_page_external-login #wpfooter {
     display: none;
     margin-top: 20px;
     text-align: center; }
+  .exlog_modal .exlog-test-results-container {
+    padding: 30px; }
+    .exlog_modal .exlog-test-results-container h2, .exlog_modal .exlog-test-results-container p {
+      color: black;
+      text-align: center; }
 
 .exlog_loader_container {
   position: absolute;
