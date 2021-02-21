@@ -13,7 +13,7 @@
     "settingsDefault": "php -r \"require './utils/SettingsBuilder.php'; require './tests/acceptance/DatabaseTools.php'; SettingsBuilder::setDefaultSettings();\"",
     "test": "php vendor/bin/codecept run --steps",
     "test-debug": "php vendor/bin/codecept run --steps --debug",
-    "ci-test": "LOCAL_PLUGIN_PATH='./dist/free/external-login' npm run dockerComposeRunner && php tests/acceptance/HealthChecks.php && dockerize -wait http://localhost:8000 -timeout 1m && npm run test"
+    "ci-test": "npm run dockerComposeRunner && php tests/acceptance/HealthChecks.php && dockerize -wait http://localhost:8000 -timeout 1m && npm run test"
   },
   "repository": {
     "type": "git",
