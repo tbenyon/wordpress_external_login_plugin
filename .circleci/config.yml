@@ -51,9 +51,9 @@ workflows:
   btd:
     jobs:
       - deployToFreemius
-      - fetchFreemiusBuild:
+      - fetchFreemiusBuilds:
           requires:
             - deployToFreemius
       - test:
           requires:
-            - fetchFreemiusBuild
+            - fetchFreemiusBuilds
