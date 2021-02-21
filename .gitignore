@@ -3,5 +3,6 @@ node_modules
 vendor
 .DS_Store
 build-scripts/build_artefacts
+build-scripts/freemiusDeployVersion.json
 dist
 yarn-error.log
