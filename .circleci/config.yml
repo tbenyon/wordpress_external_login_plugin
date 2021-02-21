@@ -36,7 +36,7 @@ jobs:
     parameters:
       test_dir:
         type: string
-        default: free
+        default: free/external-login
     machine:
       image: ubuntu-1604:201903-01
     steps:
@@ -48,7 +48,7 @@ jobs:
           command: sudo ./build-scripts/ciSetup.sh
       - run:
           name: Run Tests
-          command: LOCAL_PLUGIN_PATH='./dist/<< parameters.test_dir >>/external-login' npm run ci-test
+          command: LOCAL_PLUGIN_PATH='./dist/<< parameters.test_dir >>' npm run ci-test
 
 workflows:
   version: 2
@@ -60,11 +60,11 @@ workflows:
             - deployToFreemius
       - test:
           name: test_free
-          test_dir: free
+          test_dir: free/external-login
           requires:
             - fetchFreemiusBuilds
       - test:
-          test_dir: pro
+          test_dir: pro/external-login-pro
           name: test_pro
           requires:
             - fetchFreemiusBuilds
