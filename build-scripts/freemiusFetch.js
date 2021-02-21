@@ -11,8 +11,8 @@ const FREEMIUS_DEVELOPER_ID = process.env.FREEMIUS_DEVELOPER_ID;
 const FREEMIUS_PLUGIN_ID = process.env.FREEMIUS_PLUGIN_ID;
 
 const DIST_DIR = '../dist';
-const DIST_FREE_ZIP_FILE = 'free.zip';
 const DIST_FREE_DIR = `${DIST_DIR}/free`;
+const DIST_PRO_DIR = `${DIST_DIR}/pro`;
 const APIBASE = 'api.freemius.com';
 
 console.log("-------------------");
@@ -34,16 +34,19 @@ if (!fs.existsSync(DIST_DIR)){
     process.exit(1);
   }
 
-  try {
-    console.log('Downloading built files...');
-    await downloadFreemiusCompiledBuild(versionData);
-  } catch (e) {
-    console.log('Unable to fetch Freemius built version\n', e);
+  console.log('Downloading built files...');
+  Promise.all([
+    downloadFreemiusCompiledBuild(versionData),
+    downloadFreemiusCompiledBuild(versionData, false)
+  ]).then((values) => {
+    console.log(values);
+  }).catch(e => {
+    console.log('Unable to fetch Freemius built versions\n', e);
     process.exit(2);
-  }
+  });
 })();
 
-async function downloadFreemiusCompiledBuild(versionData) {
+async function downloadFreemiusCompiledBuild(versionData, freeVersion = true) {
   let authHeader;
   try {
     authHeader = await getAuthHeaderValue();
@@ -59,8 +62,9 @@ async function downloadFreemiusCompiledBuild(versionData) {
 
   const downloadURI = `https://${APIBASE}/v1/developers/${FREEMIUS_DEVELOPER_ID}/plugins/${FREEMIUS_PLUGIN_ID}/tags/${
     versionData.id
-  }.zip?is_premium=false`;
+  }.zip?is_premium=${freeVersion ? 'false' : 'true'}`;
 
+  const DIST_FREE_ZIP_FILE = `${freeVersion ? 'free' : 'pro'}.zip`;
   return axios(downloadURI, {
     method: 'get',
     headers: {
@@ -68,7 +72,6 @@ async function downloadFreemiusCompiledBuild(versionData) {
     },
     responseType: 'stream'
   }).then(response => {
-    const DIST_FREE_ZIP_FILE = 'free.zip';
     const writer = fs.createWriteStream(`${DIST_DIR}/${DIST_FREE_ZIP_FILE}`)
     response.data.pipe(writer);
     return new Promise((resolve, reject) => {
@@ -76,7 +79,7 @@ async function downloadFreemiusCompiledBuild(versionData) {
       writer.on('error', reject)
     })
   }).then(() => {
-    decompress(`${DIST_DIR}/${DIST_FREE_ZIP_FILE}`, DIST_FREE_DIR)
+    decompress(`${DIST_DIR}/${DIST_FREE_ZIP_FILE}`, freeVersion ? DIST_FREE_DIR : DIST_PRO_DIR)
       .then(function() {
       console.log(`Plugin v${versionData.version} successfully downloaded`);
     });
