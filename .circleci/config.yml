@@ -56,14 +56,16 @@ workflows:
     jobs:
       - deployToFreemius
       - fetchFreemiusBuilds:
-        requires:
-          - deployToFreemius
+          requires:
+            - deployToFreemius
       - test:
-        test_dir: free
-        requires:
-          - fetchFreemiusBuilds
+          name: test_free
+          test_dir: free
+          requires:
+            - fetchFreemiusBuilds
       - test:
-        test_dir: pro
-        requires:
-          - fetchFreemiusBuilds
+          test_dir: pro
+          name: test_pro
+          requires:
+            - fetchFreemiusBuilds
 
