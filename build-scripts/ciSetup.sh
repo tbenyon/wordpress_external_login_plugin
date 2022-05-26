@@ -1,11 +1,6 @@
 #! /usr/bin/env bash
 set -e
 
-echo -e "\nUpdating Package Tooling"
-LC_ALL=C.UTF-8 sudo apt update && sudo apt upgrade
-LC_ALL=C.UTF-8 sudo apt install software-properties-common
-LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
-
 echo -e "\nUpdating packages"
 apt-get update
 
@@ -15,7 +10,7 @@ apt-get install curl --assume-yes
 echo -e "\nInstalling PHP"
 apt-get install --assume-yes software-properties-common
 LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
-apt-get install --assume-yes php7.4 php7.4-curl php7.4-xml php7.4-mbstring php7.4-mysql
+LC_ALL=C.UTF-8 apt-get install --assume-yes php7.4 php7.4-curl php7.4-xml php7.4-mbstring php7.4-mysql
 
 echo -e "\nInstalling Dockerize"
 curl --location --silent --show-error https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -o dockerize-linux.tar.gz
