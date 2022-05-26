@@ -77,10 +77,6 @@ To give an idea of whether this plugin does the job you need it to, here is the 
 Please note that this system is built for the login process to be a completely different login process to anything else.
 If you are looking for Single Sign On (log in to one website and you're logged in else where) you should be looking for an OAuth solution in my opinion.
 
-= How do I add a port to the database connection? =
-
-For ports that differ the standard 3306, add them to the end of the host separated by a colon eg: 'localhost:3306'.
-
 = What hashes are available and which does my external database use? =
 
 Below is a list of the available hashing options. Within each there are examples of what the hashed string might look like.
