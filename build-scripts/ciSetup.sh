@@ -4,7 +4,7 @@ set -e
 echo -e "\nUpdating Package Tooling"
 LC_ALL=C.UTF-8 sudo apt update && sudo apt upgrade
 LC_ALL=C.UTF-8 sudo apt install software-properties-common
-LC_ALL=C.UTF-8 sudo add-apt-repository 'ppa:ondrej/php'
+LC_ALL=C.UTF-8 add-apt-repository ppa:ondrej/php
 
 echo -e "\nUpdating packages"
 apt-get update
