@@ -7,15 +7,15 @@ apt-get update
 echo -e "\nInstalling cURL"
 apt-get install curl --assume-yes
 
-echo -e "\nInstalling PHP"
-apt-get install --assume-yes software-properties-common
-LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
-sudo add-apt-repository -y --remove ppa:mc3man/trusty-media
-sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 6494C6D6997C215E
-sudo apt-get update
-sudo apt update
-sudo apt search php7
-sudo apt install php7.1
+#echo -e "\nInstalling PHP"
+#apt-get install --assume-yes software-properties-common
+#LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
+#sudo add-apt-repository -y --remove ppa:mc3man/trusty-media
+#sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 6494C6D6997C215E
+#sudo apt-get update
+#sudo apt update
+#sudo apt search php7
+#sudo apt install php7.1
 #apt install --assume-yes php7.1 php7.1-curl php7.1-xml php7.1-mbstring php7.1-mysql
 
 echo -e "\nInstalling Dockerize"
