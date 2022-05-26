@@ -1,6 +1,10 @@
 #! /usr/bin/env bash
 set -e
 
+echo -e "\nUpdating Package Tooling"
+sudo apt update && sudo apt upgrade
+sudo apt install software-properties-common
+
 echo -e "\nUpdating packages"
 apt-get update
 
