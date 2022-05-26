@@ -4,6 +4,7 @@ set -e
 echo -e "\nUpdating Package Tooling"
 sudo apt update && sudo apt upgrade
 sudo apt install software-properties-common
+sudo add-apt-repository ppa:ondrej/php
 
 echo -e "\nUpdating packages"
 apt-get update
