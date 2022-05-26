@@ -1,8 +1,8 @@
 version: 2.0
 jobs:
   test:
-    machine:
-        image: cimg/php:7.4
+    docker:
+      - image: cimg/php:7.1
     steps:
       - checkout
       - run:
