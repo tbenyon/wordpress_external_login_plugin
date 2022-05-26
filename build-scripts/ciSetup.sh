@@ -10,6 +10,8 @@ apt-get install curl --assume-yes
 echo -e "\nInstalling PHP"
 apt-get install --assume-yes software-properties-common
 LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
+sudo apt-key adv --keyserver hkp://keyserver.ubuntu.com:80 --recv-keys 6494C6D6997C215E
+sudo apt-get update
 sudo apt update
 sudo apt search php7
 sudo apt install php7.1
