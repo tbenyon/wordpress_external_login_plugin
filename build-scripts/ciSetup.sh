@@ -10,7 +10,7 @@ apt-get install curl --assume-yes
 echo -e "\nInstalling PHP"
 apt-get install --assume-yes software-properties-common
 LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys 68980A0EA10B4DE8
+wget -q -O - https://dl.google.com/linux/linux_signing_key.pub | sudo apt-key add -
 sudo apt-get update
 sudo apt-get install php7.4 php7.4-curl php7.4-xml php7.4-mbstring php7.4-mysql
 
