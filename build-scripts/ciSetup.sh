@@ -10,7 +10,7 @@ apt-get install curl --assume-yes
 echo -e "\nInstalling PHP"
 apt-get install --assume-yes software-properties-common
 LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
-apt-get install --assume-yes php7.1 php7.1-curl php7.1-xml php7.1-mbstring php7.1-mysql
+apt install --assume-yes php7.1 php7.1-curl php7.1-xml php7.1-mbstring php7.1-mysql
 
 echo -e "\nInstalling Dockerize"
 curl --location --silent --show-error https://github.com/jwilder/dockerize/releases/download/v0.6.1/dockerize-linux-amd64-v0.6.1.tar.gz -o dockerize-linux.tar.gz
