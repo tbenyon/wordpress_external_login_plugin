@@ -2,6 +2,9 @@
 set -e
 
 echo -e "\nUpdating Package Tooling"
+locale-gen en_US.UTF-8
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
 sudo apt update && sudo apt upgrade
 sudo apt install software-properties-common
 sudo add-apt-repository 'ppa:ondrej/php'
