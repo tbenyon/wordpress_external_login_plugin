@@ -7,6 +7,10 @@ apt-get update
 echo -e "\nInstalling cURL"
 apt-get install curl --assume-yes
 
+echo -e "\nInstalling Node"
+curl -fsSL https://deb.nodesource.com/setup_16.x | sudo -E bash -
+sudo apt-get install -y nodejs
+
 #echo -e "\nInstalling PHP"
 #apt-get install --assume-yes software-properties-common
 #LC_ALL=C.UTF-8 add-apt-repository --yes --update ppa:ondrej/php
