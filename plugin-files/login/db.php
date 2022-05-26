@@ -15,6 +15,14 @@ function exlog_get_external_db_instance_and_fields($dbType = false) {
 		$db_instance = null;
 		$mySqlHost = null;
 		if ($dbType == "mssql") {
+			$msSqlHost = $host;
+
+			$hostIncludesPort = strpos($host, ',') !== false;
+
+			if ($port && !$hostIncludesPort) { //If port is included in $host, don't add the $port variable as well
+				$msSqlHost .= "," . $port;
+			}
+			
 			$connectionOptions = array(
                 "Database" => exlog_get_option("external_login_option_db_name"),
                 "UID" => exlog_get_option("external_login_option_db_username"),
@@ -22,7 +30,7 @@ function exlog_get_external_db_instance_and_fields($dbType = false) {
                 "APP" => "WordPressExternalLogin",
                 "ApplicationIntent" => "ReadOnly"
             );
-			$db_instance = sqlsrv_connect( exlog_get_option("external_login_option_db_host"), $connectionOptions);
+			$db_instance = sqlsrv_connect( $msSqlHost , $connectionOptions);
 			if( $db_instance === false ) {
 				error_log('EXLOG:');
 				error_log(var_export(sqlsrv_errors(), true));
